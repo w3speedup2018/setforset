@@ -16,7 +16,7 @@
     {% if section.settings.parallax_effect %}
       <div class="parallax__wrap horizontal-text-position--{{ text_position[0] }} vertical-text-position--{{ text_position[1] }}">
         {{ banner_text }}
-        <div class="parallax" data-parallax-image="{{ article.image | img_url: '2048x' }}">
+        <div class="parallax" data-parallax-image="{{ article.image | img_url: '2048x' }}" >
           <noscript>
             <img src="{{ article.image | img_url: '2000x' }}" alt="{{ alt | escape }}" class="image__fallback">
           </noscript>
@@ -76,7 +76,7 @@
               {% render 'article-author-meta', article: article %}
 
             {% endif %}
-      
+
             {% if section.settings.blog_tags %}
               <div class="blog_meta tags {% if sidebar == false %}is-hidden-desktop-only{% endif %}">
                 {% for tag in article.tags %}
@@ -114,9 +114,9 @@
                       <span>
                         <a href="{{ article.url }}#disqus_thread" data-disqus-identifier="{{ article.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
                       </span>
-                    {% elsif article.comments_enabled? and article.comments_count > 0 %}
+                    {% elsif article.comments_enabled? %}
                       <span>
-                        <a href="{{ article.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}</a>
+                        <a href="{{ article.url }}#comments" id="fastcomments-widget-comment-count"></a>
                       </span>
                     {% endif %}
                   {% endif %}
@@ -149,7 +149,7 @@
               <div class="one-whole column">
 
                 <div class="one-whole column st-single-article">
-                  {{ article.content | replace: '<img', '<img loading="lazy" width="800" height="800"' }}
+                  {{ article.content | replace: '<img', '<img loading="lazy" width="800" height="800"' | replace: 'iframe', 'iframelazy' | replace: 'src="https://www.youtube.com', 'data-class="LazyLoad" data-src="https://www.youtube.com' | replace: '<script src="//www.instagram.com/embed.js" async=""></script>', '<script type="lazyload_int" data-src="//www.instagram.com/embed.js" ></script>' | replace: '<script async src="//www.instagram.com/embed.js">', '<script type="lazyload_int" data-src="//www.instagram.com/embed.js">' | replace: 'src="https://giphy.com', 'data-class="LazyLoad" data-src="https://giphy.com'}}
                 </div>
 
                 <div class="text-align--right">
@@ -182,100 +182,19 @@
 
               <div class="one-whole column">
                 <div class="container">
-                  <div id="comments" class="one-whole column"></div>
-                  {% if settings.disqus_enabled %}
-                    <div id="disqus_thread" class="one-whole column"></div>
-                    <script>
-                      var disqus_config = function () {
-                          this.page.url = "{{ canonical_url }}";
-                          this.page.identifier = "{{ article.id }}";
-                      };
-                      (function() {
-                          var d = document, s = d.createElement('script');
-                          s.src = '//{{ settings.disqus_shortname }}.disqus.com/embed.js';
-                          s.setAttribute('data-timestamp', +new Date());
-                          (d.head || d.body).appendChild(s);
-                      })();
+                    <script type="lazyload_int" data-src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
+                    <div id="comments" class="one-whole column"></div>
+                    <script type="lazyload_int">
+                        FastCommentsUI(document.getElementById('comments'), {
+                            tenantId: "A3CQQRBhLZcR",
+                            url: location.href.replace(location.hash, '').replace(window.location.search, ''),
+                            urlId: location.href.replace(location.hash, '').replace(window.location.search, ''),
+                            commentCountUpdated: function(count) {
+                              const postfix = count === 1 ? " comment" : " comments";
+                              document.getElementById('fastcomments-widget-comment-count').innerHTML = Number(count).toLocaleString() + postfix;
+                            }
+                        });
                     </script>
-                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-                  {% elsif blog.comments_enabled? %}
-                    {% if article.comments_count > 0 %}
-                      <div class="one-whole column">
-                        <h4>{{ 'blogs.comments.response_count' | t: count: article.comments.size }}</h4>
-                      </div>
-
-                      {% for comment in article.comments %}
-                        <div id="comment-{{ comment.id }}" class="comment one-whole column container">
-                          <div class="gravatar one-fifth column center" data-email="{{ comment.email }}">
-                            <img src="//1.gravatar.com/avatar/{{ comment.email | md5 }}?s=80&r=G" alt="{{ comment.author }}" />
-                          </div>
-                          <div class="comment-body four-fifths columns">
-                            <h6>{{ comment.author }}</h6>
-                            <p class="meta">
-                              <span class="label">{{ comment.created_at | date: format: "month_day_year" }}</span>
-                            </p>
-
-                            {{ comment.content }}
-                          </div>
-                        </div>
-                      {% endfor %}
-
-                    {% endif %}
-
-                    {% render 'pagination',
-                            sidebar: sidebar,
-                            paginate: paginate
-                    %}
-
-                    <div class="one-whole column">
-                      <div id="new-comment"></div>
-
-                      <h4>{{ 'blogs.comments.title' | t }}</h4>
-
-                      {% if blog.moderated? %}
-                        <p>
-                          <em>{{ 'blogs.comments.moderated' | t }}</em>
-                        </p>
-                      {% endif %}
-
-                      {% form article %}
-                        {% if form.posted_successfully? %}
-                          <div class="comment-form__success">
-                            {% if blog.moderated? %}
-                              <p class="comment-form__success-message">{{ 'blogs.comments.success_moderated' | t }}</p>
-                            {% else %}
-                              <p class="comment-form__success-message">{{ 'blogs.comments.success' | t }}</p>
-                            {% endif %}
-                          </div>
-                        {% endif %}
-
-                        {% if form.errors %}
-                          <div class="comment-form__error">
-                            <p class="comment-form__error-message">{{ 'general.forms.post_error' | t }}</p>
-                          </div>
-                        {% endif %}
-
-                        <div class="comment-form__name">
-                          <label for="comment_author">{{ 'blogs.comments.name' | t }} <span class="red">*</span></label>
-                          <input type="text" id="comment_author" name="comment[author]" value="{{ form.author }}" required="required" />
-                        </div>
-
-                        <div class="comment-form__email">
-                          <label for="comment_email">{{ 'blogs.comments.email' | t }} <span class="red">*</span></label>
-                          <input type="text" id="comment_email" name="comment[email]" value="{{ form.email }}" required="required" />
-                        </div>
-
-                        <div class="comment-form__body">
-                          <label for="comment_body">{{ 'blogs.comments.comment' | t }} <span class="red">*</span></label>
-                          <textarea id="comment_body" name="comment[body]" rows="5" required="required">{{ form.body }}</textarea>
-                        </div>
-
-                        <div class="comment-form__submit">
-                          <input type="submit" value="{{ 'blogs.comments.post' | t }}" id="comment-submit" class="action_button" />
-                        </div>
-                      {% endform %}
-                    </div>
-                  {% endif %}
                 </div>
               </div>
           </div>
@@ -337,9 +256,9 @@
                         <span>
                           <a href="{{ a.url }}#disqus_thread" data-disqus-identifier="{{ a.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
                         </span>
-                      {% elsif a.comments_enabled? and a.comments_count > 0 %}
+                      {% elsif a.comments_enabled? %}
                         <span>
-                          <a href="{{ a.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: a.comments_count }}</a>
+                          <a href="{{ a.url }}#comments" id="fastcomments-widget-comment-count"></a>
                         </span>
                       {% endif %}
                     </p>

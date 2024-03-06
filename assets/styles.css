@@ -3109,7 +3109,7 @@ select::-ms-expand {
 }
 
 select {
-  background: url(//www.setforset.com/cdn/shop/t/55/assets/select.png?v=121107487288786120051704096492) no-repeat right, #fff;
+  background: url(//www.setforset.com/cdn/shop/t/62/assets/select.png?v=121107487288786120051709032379) no-repeat right, #fff;
   box-sizing: border-box;
   border-radius: 3px;
   border: 1px solid #d9dbdc;
@@ -11137,8 +11137,8 @@ input {
 
 @font-face {
   font-family: "ootsb";
-  src: url(//www.setforset.com/cdn/shop/t/55/assets/ootsb.eot?v=39625945060011876101704096492);
-  src: url(//www.setforset.com/cdn/shop/t/55/assets/ootsb.eot?v=39625945060011876101704096492) format("embedded-opentype"), url(//www.setforset.com/cdn/shop/t/55/assets/ootsb.ttf?v=88425513192927513031704096492) format("truetype"), url(//www.setforset.com/cdn/shop/t/55/assets/ootsb.woff?v=42397042526341430171704096492) format("woff"), url(//www.setforset.com/cdn/shop/t/55/assets/ootsb.svg?v=58526098964867671161704096492) format("svg");
+  src: url(//www.setforset.com/cdn/shop/t/62/assets/ootsb.eot?v=39625945060011876101709032379);
+  src: url(//www.setforset.com/cdn/shop/t/62/assets/ootsb.eot?v=39625945060011876101709032379) format("embedded-opentype"), url(//www.setforset.com/cdn/shop/t/62/assets/ootsb.ttf?v=88425513192927513031709032379) format("truetype"), url(//www.setforset.com/cdn/shop/t/62/assets/ootsb.woff?v=42397042526341430171709032379) format("woff"), url(//www.setforset.com/cdn/shop/t/62/assets/ootsb.svg?v=58526098964867671161709032379) format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

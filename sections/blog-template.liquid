@@ -145,9 +145,9 @@
                     <span>
                       <a href="{{ article.url }}#disqus_thread" data-disqus-identifier="{{ article.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
                     </span>
-                  {% elsif article.comments_enabled? and article.comments_count > 0 %}
+                  {% elsif article.comments_enabled? %}
                     <span>
-                      <a href="{{ article.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}</a>
+                      <a href="{{ article.url }}#comments" class="fast-comments-count" data-fast-comments-url-id="https://www.setforset.com/{{ article.url }}"></a>
                     </span>
                   {% endif %}
                 {% endif %}
@@ -190,6 +190,12 @@
       %}
     {% endpaginate %}
     </div>
+    <script src="https://cdn.fastcomments.com/js/widget-comment-count-bulk.min.js"></script>
+    <script>
+      FastCommentsCommentCountBulk({
+          tenantId: 'A3CQQRBhLZcR'
+      });
+    </script>
   </div>
 </section>
 

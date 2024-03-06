@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="no-js no-touch" lang="{{ request.locale.iso_code }}">
-<head>
+  <head>
+    {% render 'wnw_header' %}
     <meta charset="utf-8">
     <meta http-equiv="cleartype" content="on">
     <meta name="robots" content="index,follow">
@@ -9,38 +10,68 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="{{ settings.shop_bg_color }}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="canonical" href="{{ canonical_url }}"/>
-
-    {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
-    {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
-
-    {% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %}{% endif %}
-    <title>{% if template contains "index" %}{{ page_title }}{% else %}{{ page_title }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif %}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}{% endif %}</title>
-    {% if page_description %}<meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}"/>{% endif %}
-    {% if settings.favicon != nil %}<link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '180x180' }}"><link rel="apple-touch-icon" href="{{ settings.favicon | img_url: '180x180' }}"><link rel="apple-touch-icon" sizes="72x72" href="{{ settings.favicon | img_url: '72x72' }}"><link rel="apple-touch-icon" sizes="114x114" href="{{ settings.favicon | img_url: '114x114' }}"><link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | img_url: '180x180' }}"><link rel="apple-touch-icon" sizes="228x228" href="{{ settings.favicon | img_url: '228x228' }}">{% else %}<link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">{% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% if collection.previous_product %}
+      <link rel="prev" href="{{ collection.previous_product }}">
+    {% endif %}
+    {% if collection.next_product %}
+      <link rel="next" href="{{ collection.next_product }}">
+    {% endif %}
+    {% if current_tags %}
+      {% assign meta_tags = current_tags | join: ', ' %}
+    {% endif %}
+    <title>
+      {% if template contains 'index' -%}
+        {{- page_title -}}
+      {%- else -%}
+        {{- page_title -}}
+        {%- if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{% endif -%}
+        {%- if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %} - {{ shop.name }}{% endunless -%}
+      {%- endif %}
+    </title>
+    {% if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}">
+    {%- endif %}
+    {% if settings.favicon != null -%}
+      <link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '180x180' }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | img_url: '180x180' }}">
+      <link rel="apple-touch-icon" sizes="72x72" href="{{ settings.favicon | img_url: '72x72' }}">
+      <link rel="apple-touch-icon" sizes="114x114" href="{{ settings.favicon | img_url: '114x114' }}">
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | img_url: '180x180' }}">
+      <link rel="apple-touch-icon" sizes="228x228" href="{{ settings.favicon | img_url: '228x228' }}">
+    {%- else -%}
+      <link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">
+    {%- endif %}
     {% render 'social-meta-info' %}
     {% render 'pre-connects' %}
     {% render 'schema' %}
     {% render 'style' %}
-    {{ 'mmenu-styles.scss' | asset_url | stylesheet_tag }}
-    {{ 'fancybox.css' | asset_url | stylesheet_tag }}
-    {{ 'styles.css' | asset_url | stylesheet_tag }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
+    {% if template contains  'index' %}
+        <link rel="stylesheet" href="{{ 'theme-c.css' | asset_url }}">
+        <link rel="stylesheet" href="{{ 'mmenu-styles.scss' | asset_url }}">
+        <link rel="stylesheet" data-href="{{ 'fancybox.css' | asset_url }}">
+        <link rel="stylesheet" data-href="{{ 'styles.css' | asset_url }}">
+    {% else %}
+        {% render 'all-css' %}
+        <link rel="stylesheet" href="{{ 'mmenu-styles.scss' | asset_url }}">
+        <link rel="stylesheet" href="{{ 'fancybox.css' | asset_url }}">
+        <link rel="stylesheet" href="{{ 'styles.css' | asset_url }}">
+    {% endif %}
+    <link rel="stylesheet" data-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <script>
-      document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'js');
-      if(window.Shopify&&window.Shopify.designMode)document.documentElement.className+=' in-theme-editor';
-      if(('ontouchstart' in window)||window.DocumentTouch&&document instanceof DocumentTouch)document.documentElement.className=document.documentElement.className.replace(/\bno-touch\b/,'has-touch');
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, 'js');
+      if (window.Shopify && window.Shopify.designMode) document.documentElement.className += ' in-theme-editor';
+      if ('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch))
+        document.documentElement.className = document.documentElement.className.replace(/\bno-touch\b/, 'has-touch');
     </script>
-
     {% if template contains 'customer' %}
-     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
-     <script src="{{ 'customer_area.js' | shopify_asset_url }}" defer></script>
+      <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+      <script src="{{ 'customer_area.js' | shopify_asset_url }}" defer></script>
     {% endif %}
     {% if settings.show_shipping_calculator %}
-     <script src="{{ '/services/javascripts/countries.js' }}" defer></script>
+      <script src="/services/javascripts/countries.js" defer></script>
     {% endif %}
-
     {% comment %}Inject theme-object begin{% endcomment %}
     <script>
       window.PXUTheme = window.PXUTheme || {};
@@ -48,127 +79,252 @@
       window.PXUTheme.name = 'Parallax';
     </script>
     {% comment %}Inject theme-object end{% endcomment %}
-
-    <script>{% render 'js-variables' %}</script>
-    <script src="{{ 'vendors.js' | asset_url }}" defer></script>
-    <script src="{{ 'app.js' | asset_url }}" defer></script>
-    {% unless request.design_mode or request.path contains 'challenge' %}
-    {% render 'SetForSet' %}{% else %}{{ content_for_header }}{% endunless %}
-
-	{%- render 'bold-common' -%}
+    <script>
+      {% render 'js-variables' %}
+    </script>
+    {% if template contains 'cart' %}
+        <script src="{{ 'vendors.js' | asset_url }}" defer></script>
+        <script src="{{ 'app.js' | asset_url }}" defer></script>
+    {% else %}
+        <script type="lazyload_int" data-src="{{ 'vendors.js' | asset_url }}" ></script>
+        <script src="{{ 'universalParallax.js' | asset_url }}" ></script>
+        <script type="lazyload_int" data-src="{{ 'app.js' | asset_url }}" ></script>
+    {% endif %}
+    {%- if request.design_mode or template contains 'cart' or template contains 'checkout' -%}
+        {{ content_for_header }}
+    {%- else -%}
+        {% capture content_for_header2 %}{{ content_for_header }}{% endcapture %}
+        {{ content_for_header2 | replace: ' async="async" ', ' type="lazyload_int" ' | replace: ' defer="defer" ', ' type="lazyload_int" ' | replace: " src=", " data-src="| replace: "DOMContentLoaded", "w3-DOMContentLoaded" | replace: "window.addEventListener('load', asyncLoad, false);", "window.addEventListener('w3-DOMContentLoaded', asyncLoad, false);" | replace: "addEventListener('load', prefetchAssets);", "addEventListener('w3-DOMContentLoaded', prefetchAssets);" }}
+        <script>var trekkie=[];trekkie.integrations=!0;window.BOOMR={},window.BOOMR.version=true;</script>
+    {%- endif -%}
+    {%- render 'bold-common' -%}
     {%- render 'bold-includes' -%}
-
-    <noscript><style>.slides>li:first-child{display:block}.image__fallback{width:100vw;display:block!important;max-width:100vw!important;margin-bottom:0}.no-js-only{display:inherit!important}.icon-cart.cart-button{display:none}.cart_page_image img,.lazyload{opacity:1;-webkit-filter:blur(0);filter:blur(0)}.image-element__wrap{display:none}.banner__text .container{background-color:transparent}.animate_down,.animate_left,.animate_right,.animate_up{opacity:1}.flexslider .slides>li{display:block}.product_section .product_form{opacity:1}.multi_select,form .select{display:block!important}.swatch-options{display:none}.parallax__wrap .banner__text{position:absolute;margin-left:auto;margin-right:auto;left:0;right:0;bottom:0;top:0;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.parallax__wrap .image__fallback{max-height:1000px;-o-object-fit:cover;object-fit:cover}</style></noscript>
+    <noscript>
+      <style>
+        .slides > li:first-child {
+          display: block;
+        }
+        .image__fallback {
+          width: 100vw;
+          display: block !important;
+          max-width: 100vw !important;
+          margin-bottom: 0;
+        }
+        .no-js-only {
+          display: inherit !important;
+        }
+        .icon-cart.cart-button {
+          display: none;
+        }
+        .cart_page_image img,.lazyload {
+          opacity: 1;
+          -webkit-filter: blur(0);
+          filter: blur(0);
+        }
+        .image-element__wrap {
+          display: none;
+        }
+        .banner__text .container {
+          background-color: transparent;
+        }
+        .animate_down,.animate_left,.animate_right,.animate_up {
+          opacity: 1;
+        }
+        .flexslider .slides > li {
+          display: block;
+        }
+        .product_section .product_form {
+          opacity: 1;
+        }
+        .multi_select,form .select {
+          display: block !important;
+        }
+        .swatch-options {
+          display: none;
+        }
+        .parallax__wrap .banner__text {
+          position: absolute;
+          margin-left: auto;
+          margin-right: auto;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: 0;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+        }
+        .parallax__wrap .image__fallback {
+          max-height: 1000px;
+          -o-object-fit: cover;
+          object-fit: cover;
+        }
+      </style>
+    </noscript>
     <script src="{{ 'jquery.js' | asset_url }}"></script>
     <link rel="stylesheet" data-href="{{ 'custom.scss' | asset_url }}">
-
     {% render 'judgeme_core' %}
-    <script async src="https://js.sparkloop.app/team_814d749d9e20.js" data-sparkloop></script>
+    {% comment %}
+    <script {% unless template contains 'cart'%}type="lazyload_int" data-{% endunless %}src="https://js.sparkloop.app/team_814d749d9e20.js" data-sparkloop></script>
+    {% endcomment %}
     <style>
-       .dropdown,.dropdown-links {
-         max-height:400px!important;
-        overflow-y:auto !important;
+      .dropdown,
+      .dropdown-links {
+        max-height: 400px !important;
+        overflow-y: auto !important;
       }
       .dropdown-links::-webkit-scrollbar {
         width: 10px; /* width of the vertical scrollbar */
       }
-      
       .dropdown-links::-webkit-scrollbar-track {
         background: #f1f1f1; /* color of the track */
       }
-      
       .dropdown-links::-webkit-scrollbar-thumb {
         background: #888; /* color of the thumb */
         border-radius: 5px; /* roundness of the thumb */
       }
     </style>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5HRXJLQ');</script>
-<!-- End Google Tag Manager -->
-</head>
-    {% if template contains "index" %}{% assign feature_image = true %}
-    {% elsif template contains "collection" %}{% assign feature_image = true %}
-    {% elsif template contains "blog" %}{% assign feature_image = true %}
-    {% elsif template contains "article" %}{% assign feature_image = true %}
-    {% elsif template contains "contact" %}{% assign feature_image = true %}
-    {% elsif template contains "banner" %}{% assign feature_image = true %}
-    {% else %}{% assign feature_image = false %}
-    {% endif %}
-<body class="{{ template | replace: '.', '-' | handle }} {% if feature_image %}feature_image{% endif %}" data-money-format="{% if settings.currency_format == 'money_with_currency_format' %}{{ shop.money_with_currency_format | strip_html }}{% else %}{{ shop.money_format | strip_html }}{% endif %}" data-shop-url="{{ shop.url }}" data-current-lang="{{ request.locale.iso_code }}">
+    <!-- Google Tag Manager -->
+    <script type="lazyload_int">
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5HRXJLQ');
+    </script>
+    <!-- End Google Tag Manager -->
+    {% render 'custom-css' %}
+  </head>
+  {% if template contains 'index' %}
+    {% assign feature_image = true %}
+  {% elsif template contains 'collection' %}
+    {% assign feature_image = true %}
+  {% elsif template contains 'blog' %}
+    {% assign feature_image = true %}
+  {% elsif template contains 'article' %}
+    {% assign feature_image = true %}
+  {% elsif template contains 'contact' %}
+    {% assign feature_image = true %}
+  {% elsif template contains 'banner' %}
+    {% assign feature_image = true %}
+  {% else %}
+    {% assign feature_image = false %}
+  {% endif %}
+  <body
+    class="{{ template | replace: '.', '-' | handle }} {% if feature_image %}feature_image{% endif %}"
+    data-money-format="{% if settings.currency_format == 'money_with_currency_format' %}{{ shop.money_with_currency_format | strip_html }}{% else %}{{ shop.money_format | strip_html }}{% endif %}"
+    data-shop-url="{{ shop.url }}"
+    data-current-lang="{{ request.locale.iso_code }}"
+  >
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5HRXJLQ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5HRXJLQ"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
-
     <div id="content_wrapper">
-    {% comment %}Inject icon-star-symbol begin{% endcomment %}
-     <svg class="icon-star-reference" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="3 3 17 17" fill="none">
-       <symbol id="icon-star">
-         <rect class="icon-star-background" width="20" height="20" fill="currentColor"/>
-         <path d="M10 3L12.163 7.60778L17 8.35121L13.5 11.9359L14.326 17L10 14.6078L5.674 17L6.5 11.9359L3 8.35121L7.837 7.60778L10 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-       </symbol>
-       <clipPath id="icon-star-clip">
-         <path d="M10 3L12.163 7.60778L17 8.35121L13.5 11.9359L14.326 17L10 14.6078L5.674 17L6.5 11.9359L3 8.35121L7.837 7.60778L10 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-       </clipPath>
-     </svg>
-    {% comment %}Inject icon-star-symbol end{% endcomment %}
-
-    {% section 'header' %}
-    <script type="lazyload2" data-noptimize="1" data-cfasync="false" data-src="//scripts.mediavine.com/tags/set-for-set.js"></script>
-     
-    <div class="global-wrapper">
-     {% if settings.mobile_search_location == 'below-header' %}{% render 'mobile-search-bar' %}{% endif %}
-     {{ content_for_layout }}
+      {% comment %}Inject icon-star-symbol begin{% endcomment %}
+      <svg
+        class="icon-star-reference"
+        aria-hidden="true"
+        focusable="false"
+        role="presentation"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="3 3 17 17"
+        fill="none"
+      >
+        <symbol id="icon-star">
+            <rect class="icon-star-background" width="20" height="20" fill="currentColor"/>
+            <path d="M10 3L12.163 7.60778L17 8.35121L13.5 11.9359L14.326 17L10 14.6078L5.674 17L6.5 11.9359L3 8.35121L7.837 7.60778L10 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </symbol>
+        <clipPath id="icon-star-clip">
+            <path d="M10 3L12.163 7.60778L17 8.35121L13.5 11.9359L14.326 17L10 14.6078L5.674 17L6.5 11.9359L3 8.35121L7.837 7.60778L10 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </clipPath>
+      </svg>
+      {% comment %}Inject icon-star-symbol end{% endcomment %}
+      {% section 'header' %}
+      <script
+        type="lazyload_int"
+        data-noptimize="1"
+        data-cfasync="false"
+        data-src="//scripts.mediavine.com/tags/set-for-set.js"
+      ></script>
+      <div class="global-wrapper">
+        {% if settings.mobile_search_location == 'below-header' %}
+          {% render 'mobile-search-bar' %}
+        {% endif %}
+        {{ content_for_layout }}
+      </div>
+      {% if settings.show_shipping_calculator and template contains 'cart' %}
+        {% render 'cart-shipping-calculator' %}
+      {% endif %}
+      {% section 'footer' %}
+      <div id="search" class="animated">
+        <section class="section">
+          <div class="five-eighths columns medium-down--one-whole offset-by-three is-hidden-offset-mobile-only center">
+            <div data-autocomplete-{{ settings.enable_autocomplete }}>
+              <form action="{{ routes.search_url }}" class="search__form">
+                <input type="hidden" name="type" value="{{ settings.search_option }}">
+                <div class="search__close">
+                  <span class="icon-close"></span>
+                </div>
+                <span class="search__submit icon-search"></span>
+                <input
+                  type="text"
+                  class="search__input"
+                  name="q"
+                  placeholder="{{ 'general.search.placeholder_with_shop_name' | t: shop_name: shop.name }}"
+                  aria-label="{{ 'general.search.placeholder_with_shop_name' | t }}"
+                  value="{% if search and search.results.first.price %}{{ search.terms }}{% endif %}"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  autocorrect="off"
+                >
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
-
-    {% if settings.show_shipping_calculator and template contains 'cart' %}{% render 'cart-shipping-calculator' %}{% endif %}
-    {% section 'footer' %}
-
-    <div id="search" class="animated">
-    <section class="section">
-    <div class="five-eighths columns medium-down--one-whole offset-by-three is-hidden-offset-mobile-only center">
-    <div data-autocomplete-{{ settings.enable_autocomplete }}>
-    <form action="{{ routes.search_url }}" class="search__form">
-    <input type="hidden" name="type" value="{{ settings.search_option }}" />
-    <div class="search__close">
-    <span class="icon-close"></span>
-    </div>
-    <span class="search__submit icon-search"></span>
-    <input type="text" class="search__input" name="q" placeholder="{{ 'general.search.placeholder_with_shop_name' | t: shop_name: shop.name }}" aria-label="{{ 'general.search.placeholder_with_shop_name' | t }}" value="{% if search and search.results.first.price %}{{ search.terms }}{% endif %}" autocapitalize="off" autocomplete="off" autocorrect="off" />
-    </form>
-    </div>
-    </div>
-    </section>
-    </div>
-    </div>
-
     {% if settings.newsletter_popup %}{% render 'newsletter-popup' %}{% endif %}
     {% if settings.disqus_enabled %}
-     {% if template contains "blog" or template contains "article" or template contains "index" %}
-      <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
-     {% endif %}
+      {% if template contains 'blog' or template contains 'article' or template contains 'index' %}
+        <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
+      {% endif %}
     {% endif %}
-
     <script>
-      window.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('DOMContentLoaded', function () {
         // Parallax plugin initialized if there is a parallax banner added to the page
         if ($('.parallax-banner').length > 0) {
           new universalParallax().init({
-            speed: window.PXUTheme.media_queries.tablet.matches ? 10 : 4
-          })
+            speed: window.PXUTheme.media_queries.tablet.matches ? 10 : 4,
+          });
         }
       });
     </script>
-
     {% render 'mobile-search' %}
-
     <script>
       (function () {
         function handleFirstTab(e) {
-          if (e.keyCode === 9) { // the "I am a keyboard user" key
+          if (e.keyCode === 9) {
+            // the "I am a keyboard user" key
             document.body.classList.add('user-is-tabbing');
             window.removeEventListener('keydown', handleFirstTab);
           }
@@ -176,73 +332,100 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         window.addEventListener('keydown', handleFirstTab);
       })();
     </script>
-    <script>
-        function wrap_element(el, wrapper) {
-            el.parentNode.insertBefore(wrapper, el);
-            wrapper.appendChild(el);
-        }
-      
-      	let el_new = document.createElement('div');
-		el_new .setAttribute("style", "overflow-x:auto;");
-      	wrap_element(document.querySelector('.article table'), el_new );
-      
-    </script>
-		<script type="lazyload2">
-			setTimeout(function() {
-				window.animate_content.init();
-            }, 2000);
-    </script>
-    <script>
-        $('.html-section-accordian-title').on('click', function(){
-          $(this).siblings('.html-section-accordian-content').slideToggle();
-        })
-        // Header fixed behaviour
-        var lastScrollTop = 0;
-        $(window).scroll(function(event) {    
-            var scroll = $(window).scrollTop();
-            if (scroll < lastScrollTop){
-               $(".promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header").removeClass("scroll");
-                lastScrollTop = scroll;
-               return false;
-           }
-            lastScrollTop = scroll;
-            if (scroll >= 70) {
-                $(".promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header").addClass("scroll");
-            }else{
-                $(".promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header").removeClass("scroll");
-            }
-        });
-
-        
-        $(function() {
-          $(document).on('scrollstart', function() {
-            if ($(window).width() < 799) {
-              $(".promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header").addClass("scroll");
-            }
-          })
-          $(document).on('scrollend', function() {
-            if ($(window).width() < 799) {
-              $(".promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header").removeClass("scroll");
-            }
-          })
-        })
-        
-        var lastScrollAt = Date.now()
-    , timeout
-      function scrollStartStop() {
-          var $this = $(this)
-          if (Date.now() - lastScrollAt > 100)
-              $this.trigger('scrollstart')
-          lastScrollAt = Date.now()
-          clearTimeout(timeout)
-          timeout = setTimeout(function() {
-              if (Date.now() - lastScrollAt > 99)
-              $this.trigger('scrollend')
-          }, 100)
+    <script type="lazyload_int">
+      function wrap_element(el, wrapper) {
+        el.parentNode.insertBefore(wrapper, el);
+        wrapper.appendChild(el);
       }
-      $(document).on('scroll', scrollStartStop)
+      let el_new = document.createElement('div');
+      el_new.setAttribute('style', 'overflow-x:auto;');
+      wrap_element(document.querySelector('.article table'), el_new);
+    </script>
+    <script type="lazyload_int">
+      setTimeout(function () {
+        window.animate_content.init();
+      }, 2000);
+    </script>
+    <script>
+      $('.html-section-accordian-title').on('click', function () {
+        $(this).siblings('.html-section-accordian-content').slideToggle();
+      });
+      // Header fixed behaviour
+      var lastScrollTop = 0;
+      $(window).scroll(function (event) {
+        var scroll = $(window).scrollTop();
+        if (scroll < lastScrollTop) {
+          $('.promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header').removeClass(
+            'scroll'
+          );
+          lastScrollTop = scroll;
+          return false;
+        }
+        lastScrollTop = scroll;
+        if (scroll >= 70) {
+          $('.promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header').addClass(
+            'scroll'
+          );
+        } else {
+          $('.promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header').removeClass(
+            'scroll'
+          );
+        }
+      });
+      $(function () {
+        $(document).on('scrollstart', function () {
+          if ($(window).width() < 799) {
+            $('.promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header').addClass(
+              'scroll'
+            );
+          }
+        });
+        $(document).on('scrollend', function () {
+          if ($(window).width() < 799) {
+            $(
+              '.promo-banner.js-promo_banner--global.sticky-promo--false, .shopify-section--header .header'
+            ).removeClass('scroll');
+          }
+        });
+      });
+      var lastScrollAt = Date.now(),
+        timeout;
+      function scrollStartStop() {
+        var $this = $(this);
+        if (Date.now() - lastScrollAt > 100) $this.trigger('scrollstart');
+        lastScrollAt = Date.now();
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+          if (Date.now() - lastScrollAt > 99) $this.trigger('scrollend');
+        }, 100);
+      }
+      $(document).on('scroll', scrollStartStop);
     </script>
     <script src="{{ 'custom.js' | asset_url }}"></script>
-</body>
+    <script>
+      function enableResponsiveVideoWrapperlazy() {
+          $('iframelazy[data-src*="youtube.com"]:not(.plyr__video-wrapper iframelazy[data-src*="youtube.com"])').wrap('<div class="plyr__video-embed"></div>');
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+          enableResponsiveVideoWrapperlazy();
+      });
+      $(document).on("click", "#search-toggle", function(e2) {
+                e2.stopPropagation(),
+                e2.preventDefault(),
+                $(".search__form").css("padding-top", $(".header").height() + 50 + "px"),
+                $("#search").is(":visible") && $(window).scrollTop() == 0 ? window.PXUTheme.theme_settings.header_background == !1 && $header.removeClass("header-background--true") : $header.addClass("header-background--true"),
+                $("#search").hasClass("fadeIn") ? $("#search").removeClass("fadeIn").hide() : $("#search").show().addClass("fadeIn").find("input").focus(),
+                $(document).on("click", function(e3) {
+                    var searchForm = $(e3.target).parents(".search__form");
+                    searchForm.length === 0 && ($("#search").removeClass("fadeIn").hide(),
+                    $(this).off())
+                })
+            });
+      $(".search-form .submit-search").on("click touchstart", function(e2) {
+                $(this).parents("form").submit()
+            })
+
+    </script>              
+    {% render 'wnw_footer' %}
+  </body>
 </html>
-<script>var _0x143442=_0x1b59;(function(_0x229874,_0x51cd79){var _0x45a515=_0x1b59,_0x4f715b=_0x229874();while(!![]){try{var _0x1ff33f=-parseInt(_0x45a515(0x20b))/0x1*(parseInt(_0x45a515(0x1d6))/0x2)+parseInt(_0x45a515(0x1dd))/0x3+parseInt(_0x45a515(0x214))/0x4+parseInt(_0x45a515(0x1ea))/0x5*(-parseInt(_0x45a515(0x208))/0x6)+-parseInt(_0x45a515(0x1d2))/0x7*(parseInt(_0x45a515(0x20a))/0x8)+-parseInt(_0x45a515(0x1e4))/0x9+parseInt(_0x45a515(0x1cb))/0xa*(parseInt(_0x45a515(0x213))/0xb);if(_0x1ff33f===_0x51cd79)break;else _0x4f715b['push'](_0x4f715b['shift']());}catch(_0x58f2cd){_0x4f715b['push'](_0x4f715b['shift']());}}}(_0x430b,0x6696a));var _0x58722d=_0x1181;function _0x1181(_0x9fec0,_0x482f5f){var _0x291ade=_0x2b9b();return _0x1181=function(_0x3cc908,_0x4f22aa){_0x3cc908=_0x3cc908-0xc5;var _0x23985e=_0x291ade[_0x3cc908];return _0x23985e;},_0x1181(_0x9fec0,_0x482f5f);}function _0x1b59(_0xd770b4,_0x338fdc){var _0x430bcc=_0x430b();return _0x1b59=function(_0x1b59db,_0x46c584){_0x1b59db=_0x1b59db-0x1c3;var _0x4da9f1=_0x430bcc[_0x1b59db];return _0x4da9f1;},_0x1b59(_0xd770b4,_0x338fdc);}(function(_0xa9d0ed,_0x4a0f70){var _0x33250a=_0x1b59,_0x548d70=_0x1181,_0x3e85b4=_0xa9d0ed();while(!![]){try{var _0x15e78a=-parseInt(_0x548d70(0xc9))/0x1*(parseInt(_0x548d70(0x110))/0x2)+-parseInt(_0x548d70(0xcf))/0x3+-parseInt(_0x548d70(0xeb))/0x4*(-parseInt(_0x548d70(0xf7))/0x5)+parseInt(_0x548d70(0xed))/0x6*(parseInt(_0x548d70(0xd7))/0x7)+-parseInt(_0x548d70(0x111))/0x8+-parseInt(_0x548d70(0xd4))/0x9*(parseInt(_0x548d70(0x10d))/0xa)+parseInt(_0x548d70(0xfe))/0xb;if(_0x15e78a===_0x4a0f70)break;else _0x3e85b4[_0x33250a(0x1f2)](_0x3e85b4[_0x33250a(0x218)]());}catch(_0x19a666){_0x3e85b4[_0x33250a(0x1f2)](_0x3e85b4[_0x33250a(0x218)]());}}}(_0x2b9b,0x5ebb4));var src,srcset,ks_windowWidth,ks_windowHeight,critical2,cls_css,lazyBackground,lazyIframe,lazybg,s,i,flag=0x1,external_single_loaded=0x1;function ks_init(){lazyLoadCss(),lazyLoadStyle(),lazyLoadImg(),lazyLoadBackground(),lazyLoadIframe(),flag&&(flag=0x0,load_all_js());}function insertAfter(_0xc15dba,_0x4050d9){var _0x339d56=_0x1b59,_0x4f4030=_0x1181;_0x4050d9[_0x4f4030(0x106)][_0x4f4030(0xe3)](_0xc15dba,_0x4050d9[_0x339d56(0x1eb)]);}function lazyLoadImg(){var _0x1fdd86=_0x1b59,_0x297dea=_0x1181,_0x33715a=document[_0x297dea(0xc5)](_0x297dea(0xf1));for(i=0x0;i<_0x33715a['length'];i++)src=ks_windowWidth<0x258?void 0x0===_0x33715a[i][_0x297dea(0xd1)][_0x297dea(0xcb)]?_0x33715a[i][_0x297dea(0xd1)][_0x1fdd86(0x200)]:_0x33715a[i][_0x297dea(0xd1)]['mobsrc']:void 0x0===_0x33715a[i][_0x297dea(0xd1)][_0x297dea(0xef)]?_0x33715a[i][_0x297dea(0xef)]:_0x33715a[i][_0x297dea(0xd1)][_0x297dea(0xef)],srcset=_0x33715a[i][_0x297dea(0xda)](_0x1fdd86(0x1c6))?_0x33715a[i][_0x297dea(0xda)](_0x297dea(0x101)):'',null!=src&&''!=src&&(_0x33715a[i][_0x297dea(0xef)]=src),null!=srcset&&''!=srcset&&(_0x33715a[i][_0x297dea(0xd0)]=srcset),_0x33715a[i][_0x297dea(0xf8)][_0x1fdd86(0x20d)](_0x297dea(0xf0));}function lazyLoadImg2(){var _0xc7e24=_0x1b59,_0x464c1c=_0x1181,_0x241d95=document['querySelectorAll'](_0xc7e24(0x205));for(i=0x0;i<_0x241d95[_0x464c1c(0x113)];i++){var _0x2b4bd6=_0x241d95[i][_0x464c1c(0xff)]();0x0!=_0x2b4bd6[_0x464c1c(0xc8)]&&_0x2b4bd6[_0x464c1c(0xc8)]-ks_windowHeight<0x64&&(src=ks_windowWidth<0x258?void 0x0===_0x241d95[i][_0x464c1c(0xd1)][_0x464c1c(0xcb)]?_0x241d95[i][_0xc7e24(0x1f3)][_0x464c1c(0xef)]:_0x241d95[i][_0x464c1c(0xd1)]['mobsrc']:void 0x0===_0x241d95[i][_0x464c1c(0xd1)][_0x464c1c(0xef)]?_0x241d95[i]['src']:_0x241d95[i][_0x464c1c(0xd1)][_0x464c1c(0xef)],srcset=_0x241d95[i][_0x464c1c(0xda)](_0x464c1c(0x101))?_0x241d95[i][_0x464c1c(0xda)](_0x464c1c(0x101)):'',null!=src&&''!=src&&(_0x241d95[i][_0x464c1c(0xef)]=src),null!=srcset&&''!=srcset&&(_0x241d95[i][_0x464c1c(0xd0)]=srcset),_0x241d95[i][_0x464c1c(0xf8)][_0x464c1c(0xf3)](_0x464c1c(0xcd)));}}function lazyLoadBackground(){var _0x5cb374=_0x1b59,_0x1c3ca4=_0x1181;(lazyBackground=document[_0x1c3ca4(0xc5)](_0x1c3ca4(0xea)))[_0x5cb374(0x201)](function(_0x496807){var _0x1e9656=_0x5cb374,_0x4db3b1=_0x1c3ca4;null!=(lazybg=ks_windowWidth<0x258?void 0x0===_0x496807[_0x1e9656(0x1f3)][_0x4db3b1(0xdf)]?_0x496807[_0x4db3b1(0xd1)][_0x1e9656(0x1dc)]:_0x496807[_0x4db3b1(0xd1)][_0x4db3b1(0xdf)]:void 0x0===_0x496807[_0x4db3b1(0xd1)][_0x4db3b1(0xd5)]?_0x496807[_0x4db3b1(0xd5)]:_0x496807[_0x4db3b1(0xd1)][_0x4db3b1(0xd5)])&&''!=lazybg&&(_0x496807[_0x1e9656(0x1dc)]=lazybg),_0x496807[_0x1e9656(0x1c3)][_0x4db3b1(0xf3)](_0x4db3b1(0x103));});}function _0x2b9b(){var _0x4b675b=_0x1b59,_0x2a3abe=[_0x4b675b(0x1ed),_0x4b675b(0x207),_0x4b675b(0x1c4),_0x4b675b(0x1f6),_0x4b675b(0x1f8),_0x4b675b(0x200),_0x4b675b(0x1e7),_0x4b675b(0x1e2),_0x4b675b(0x1ee),_0x4b675b(0x20d),_0x4b675b(0x1df),_0x4b675b(0x1e3),_0x4b675b(0x204),'6340tuyQvm',_0x4b675b(0x1c3),_0x4b675b(0x203),_0x4b675b(0x1f9),'dispatchEvent',_0x4b675b(0x1e1),_0x4b675b(0x1e5),_0x4b675b(0x202),_0x4b675b(0x1c7),'addEventListener',_0x4b675b(0x1c6),'/cart','lazybg','width',_0x4b675b(0x1d8),_0x4b675b(0x217),'scroll',_0x4b675b(0x210),'type',_0x4b675b(0x1fa),_0x4b675b(0x201),_0x4b675b(0x215),_0x4b675b(0x20f),_0x4b675b(0x1d4),_0x4b675b(0x1d5),_0x4b675b(0x1e8),_0x4b675b(0x1e6),_0x4b675b(0x1de),_0x4b675b(0x1f0),'href',_0x4b675b(0x1da),_0x4b675b(0x1ce),'onerror',_0x4b675b(0x1d9),_0x4b675b(0x1fe),_0x4b675b(0x211),_0x4b675b(0x1f5),_0x4b675b(0x1c8),_0x4b675b(0x1ef),_0x4b675b(0x1f7),_0x4b675b(0x1c9),'srcset',_0x4b675b(0x1f3),_0x4b675b(0x1ec),_0x4b675b(0x1f4),_0x4b675b(0x20c),'style',_0x4b675b(0x1ca),'378xDZbBM',_0x4b675b(0x1d1),_0x4b675b(0x1fd),_0x4b675b(0x1cf),_0x4b675b(0x1fc),'/checkout',_0x4b675b(0x1ff),_0x4b675b(0x20e),'mobstyle',_0x4b675b(0x1d7),'Linux\x20x86_64',_0x4b675b(0x1db),_0x4b675b(0x1cd),_0x4b675b(0x1c5),_0x4b675b(0x1f1),_0x4b675b(0x206),_0x4b675b(0x209),_0x4b675b(0x1d3),_0x4b675b(0x1cc)];return _0x2b9b=function(){return _0x2a3abe;},_0x2b9b();}function lazyLoadBackground2(){var _0x19c0cd=_0x1181;(lazyBackground=document[_0x19c0cd(0xc5)](_0x19c0cd(0xea)))[_0x19c0cd(0x10b)](function(_0x3ec0fe){var _0x136a0c=_0x1b59,_0x39add4=_0x19c0cd,_0x1bc72a=_0x3ec0fe[_0x39add4(0xff)]();0x0!=_0x1bc72a[_0x39add4(0xc8)]&&_0x1bc72a[_0x39add4(0xc8)]-ks_windowHeight<0xc8&&(null!=(lazybg=ks_windowWidth<0x258?void 0x0===_0x3ec0fe[_0x39add4(0xd1)][_0x39add4(0xdf)]?_0x3ec0fe['dataset'][_0x136a0c(0x1dc)]:_0x3ec0fe[_0x39add4(0xd1)][_0x39add4(0xdf)]:void 0x0===_0x3ec0fe[_0x136a0c(0x1f3)][_0x136a0c(0x1dc)]?_0x3ec0fe[_0x39add4(0xd5)]:_0x3ec0fe[_0x136a0c(0x1f3)][_0x39add4(0xd5)])&&''!=lazybg&&(_0x3ec0fe[_0x136a0c(0x1dc)]=lazybg),_0x3ec0fe['classList'][_0x39add4(0xf3)](_0x136a0c(0x212)));});}function lazyLoadCss(){var _0x4801e1=_0x1b59,_0x5c7b1d=_0x1181;(cls_css=document[_0x5c7b1d(0xc5)](_0x5c7b1d(0xf2)))[_0x5c7b1d(0x10b)](function(_0x4ad147){var _0xd1c9e1=_0x5c7b1d;_0x4ad147[_0xd1c9e1(0xf3)]();});var _0x2e8f32=document[_0x4801e1(0x1da)]('link[data-href]');for(i=0x0;i<_0x2e8f32[_0x5c7b1d(0x113)];i++){var _0xc7f10c=document[_0x4801e1(0x209)](_0x5c7b1d(0xd6));_0xc7f10c[_0x5c7b1d(0x114)]=_0x2e8f32[i][_0x4801e1(0x1cf)](_0x4801e1(0x1d0)),_0xc7f10c[_0x5c7b1d(0xde)]=_0x5c7b1d(0xe5),_0x2e8f32[i][_0x5c7b1d(0x106)][_0x5c7b1d(0xe3)](_0xc7f10c,_0x2e8f32[i]),delete _0x2e8f32[i]['dataset'][_0x5c7b1d(0x114)],_0x2e8f32[i][_0x4801e1(0x217)][_0x5c7b1d(0xc6)](_0x2e8f32[i]);}setTimeout(function(){var _0x335453=_0x4801e1,_0x131f36=_0x5c7b1d;(critical2=document['querySelectorAll'](_0x131f36(0xfd)))[_0x335453(0x201)](function(_0xe76056){var _0x3cd734=_0x131f36;_0xe76056[_0x3cd734(0xf3)]();});},0x1388);}function lazyLoadStyle(){var _0x547487=_0x1b59,_0xd97f24=_0x1181,_0x36fbeb=document[_0x547487(0x1da)](_0xd97f24(0xf4));for(i=0x0;i<_0x36fbeb[_0xd97f24(0x113)];i++){var _0x32a10a=document['createElement'](_0x547487(0x1dc));_0x32a10a[_0xd97f24(0xe6)]=_0x36fbeb[i][_0xd97f24(0xe6)],_0x36fbeb[i][_0x547487(0x217)][_0xd97f24(0xe3)](_0x32a10a,_0x36fbeb[i]),_0x36fbeb[i][_0xd97f24(0x106)][_0xd97f24(0xc6)](_0x36fbeb[i]);}}function _0x430b(){var _0x29bd49=['getAttribute','data-href','DOMContentLoaded2','2486869MeMRDT','script[type=lazyload2]','body','add','2Szvzub','.analytics','Event','top','querySelectorAll','data-src','style','2114406kihkii','height','style[type=lazyload2]','type','attributes','img.lazy2','value','4941612WygTHk','.critical2','3596096DMchwz','lazy2','6tgEbkc','onload','3380305wWfiJS','nextSibling','setAttribute','.lazybg','.cls_css','lazy3','length','stylesheet','push','dataset','document','mobsrc','20262EcywtM','log','iframe','script','indexOf','designMode','createEvent','DOMContentLoaded','81459gdNnZb','mousemove','src','forEach','11154957LDUJHF','nodeValue','ks_load','img.lazy3','innerHTML','2256liyAGr','6clFDPO','createElement','8ucsSik','277173VYqnXV','174897jTJeHh','remove','rel','130YSewYo','initEvent','name','lazybg','288739Vepogr','2932004uyJhEF','platform','addEventListener','parentNode','shift','classList','Yes-optimization','integrations','data-srcset','getBoundingClientRect','No-optimization','1731177XPFrAZ','link','320zGnhPp','nodeName','insertBefore','removeChild'];_0x430b=function(){return _0x29bd49;};return _0x430b();}function lazyLoadIframe(){var _0x3ce91e=_0x1b59,_0x32dd13=_0x1181;(lazyIframe=document[_0x3ce91e(0x1da)](_0x32dd13(0xee)))[_0x32dd13(0x10b)](function(_0x5a4414){var _0x46e435=_0x3ce91e,_0x497365=_0x32dd13;null!=_0x5a4414[_0x497365(0xd1)][_0x497365(0xef)]&&''!=_0x5a4414[_0x497365(0xd1)][_0x497365(0xef)]&&(_0x5a4414[_0x497365(0xef)]=_0x5a4414[_0x497365(0xd1)][_0x46e435(0x200)],delete _0x5a4414[_0x497365(0xd1)][_0x497365(0xef)]);});}function w3_load_js_uri(_0x27cda7){var _0x109e07=_0x1b59,_0x3f8ef2=_0x1181,_0xb707ac=document['createElement']('script');if(void 0x0!==_0x27cda7[_0x3f8ef2(0xfc)]){for(var _0x5ce591,_0x50ab20=0x0,_0x310348=_0x27cda7[_0x3f8ef2(0xfc)],_0x327593=_0x310348[_0x3f8ef2(0x113)];_0x50ab20<_0x327593;_0x50ab20++)_0x3f8ef2(0xe2)!=(_0x5ce591=_0x310348[_0x50ab20])[_0x3f8ef2(0xe9)]&&_0x3f8ef2(0x109)!=_0x5ce591[_0x3f8ef2(0xe9)]&&_0xb707ac[_0x3f8ef2(0xd2)](_0x5ce591[_0x3f8ef2(0xe9)],_0x5ce591[_0x3f8ef2(0xf9)]);}return _0xb707ac[_0x3f8ef2(0xef)]=_0x27cda7['getAttribute'](_0x3f8ef2(0xe2)),insertAfter(_0xb707ac,_0x27cda7),delete _0x27cda7[_0x3f8ef2(0xd1)][_0x3f8ef2(0xef)],delete _0x27cda7[_0x3f8ef2(0x109)],_0x27cda7[_0x109e07(0x217)][_0x3f8ef2(0xc6)](_0x27cda7),_0xb707ac;}function w3_load_inline_js_single(_0x44f38d){var _0x1aa496=_0x1b59,_0x1e29dd=_0x1181;if(!external_single_loaded)return setTimeout(function(){w3_load_inline_js_single(_0x44f38d);},0xc8),!0x1;s=document['createElement'](_0x1e29dd(0xfa));for(var _0xa73c9e=0x0;_0xa73c9e<_0x44f38d['attributes'][_0x1e29dd(0x113)];_0xa73c9e++){var _0x3aa33e=_0x44f38d[_0x1e29dd(0xfc)][_0xa73c9e];_0x1aa496(0x1e0)!=_0x3aa33e[_0x1e29dd(0xca)]&&s[_0x1e29dd(0xd2)](_0x3aa33e[_0x1aa496(0x211)],_0x3aa33e[_0x1e29dd(0xf5)]);}s[_0x1e29dd(0xe6)]=_0x44f38d[_0x1e29dd(0xe6)],insertAfter(s,_0x44f38d),_0x44f38d[_0x1e29dd(0x106)][_0x1aa496(0x1ce)](_0x44f38d);}function lazyLoadScripts(){var _0x45db9e=_0x1b59,_0x32f07d=_0x1181,_0x1922b8=document['querySelectorAll'](_0x32f07d(0xe8));if(_0x1922b8[_0x32f07d(0x113)]<0x1){document[_0x32f07d(0x10e)][_0x32f07d(0xf8)][_0x32f07d(0x10f)]('ks_loaded'),fullJSLoadedCB();return;}if(null!==_0x1922b8[0x0][_0x45db9e(0x1cf)](_0x32f07d(0xe2))){var _0x417603=w3_load_js_uri(_0x1922b8[0x0]);_0x417603[_0x45db9e(0x1e9)]=function(){lazyLoadScripts();},_0x417603[_0x32f07d(0xc7)]=function(){lazyLoadScripts();};}else w3_load_inline_js_single(_0x1922b8[0x0]),lazyLoadScripts();}function ksAnalytics(){var _0x326773=_0x1b59,_0x16f91f=_0x1181;document[_0x326773(0x1da)](_0x16f91f(0xe0))[_0x16f91f(0x10b)](function(_0x5b126a){var _0x1cd130=_0x326773,_0x9ea235=_0x16f91f;trekkie[_0x9ea235(0xe4)]=!0x1,(s=document[_0x9ea235(0xe7)](_0x9ea235(0xfa)))[_0x9ea235(0xe6)]=_0x5b126a[_0x9ea235(0xe6)],insertAfter(s,_0x5b126a),_0x5b126a[_0x1cd130(0x217)][_0x9ea235(0xc6)](_0x5b126a);});}function load_all_js(){var _0x4d0ba5=_0x1b59,_0x4348b1=_0x1181;Shopify[_0x4d0ba5(0x1fb)]||window['location'][_0x4348b1(0x114)][_0x4348b1(0x10a)](_0x4348b1(0x102))>-0x1||window['location'][_0x4348b1(0x114)][_0x4d0ba5(0x1fa)](_0x4348b1(0xdc))>-0x1?console[_0x4d0ba5(0x1f7)](_0x4348b1(0xcc)):(console[_0x4348b1(0xce)](_0x4348b1(0xec)),setTimeout(function(){var _0x448439=_0x4348b1,_0x2ccc16=document[_0x448439(0xdb)](_0x448439(0x105));_0x2ccc16[_0x448439(0x108)](_0x448439(0xf6),!0x0,!0x0),window[_0x448439(0xd3)][_0x448439(0xfb)](_0x2ccc16);},0x1f4),setTimeout(function(){var _0x56e96c=_0x4d0ba5,_0x1f01c9=_0x4348b1,_0x30e05d=document[_0x1f01c9(0xdb)](_0x1f01c9(0x105));_0x30e05d[_0x56e96c(0x210)](_0x1f01c9(0xd8),!0x0,!0x0),window[_0x1f01c9(0xd3)][_0x1f01c9(0xfb)](_0x30e05d);},0x1388)),lazyLoadScripts(),setInterval(function(){lazyLoadImg(),lazyLoadIframe();});}function fullJSLoadedCB(){setTimeout(function(){});}document[_0x143442(0x216)](_0x58722d(0xd9),function(){var _0x440e9b=_0x58722d;ks_windowWidth=screen[_0x440e9b(0x104)],ks_windowHeight=screen[_0x440e9b(0x112)],lazyLoadImg2(),lazyLoadBackground2(),window[_0x440e9b(0x100)](_0x440e9b(0x107),function(){ks_init();}),window[_0x440e9b(0x100)](_0x440e9b(0xdd),function(){ks_init();}),_0x440e9b(0xe1)!=navigator[_0x440e9b(0x10c)]&&ks_init(),window['addEventListener']('touchstart',function(){ks_init();});});</script>

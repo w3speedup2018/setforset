@@ -80,8 +80,17 @@
               {% endif %}
 
               <div class="image__container">
+{% capture image-id %}{{ product.images[forloop.index0].id }}{% endcapture %}  
+{% capture select-var-id %}{{ product.selected_or_first_available_variant.image.id }}{% endcapture %}       
+{% if product.variants.size == 1 %}              
+<style>  
+.product-gallery .product-gallery__main:not(.flickity-enabled) .product-gallery__image:nth-child(n+2) {
+    display: none;
+}        
+</style>    
+{% endif %}  
 {% if forloop.first == true %}
-<img class="removelazyload"
+<img class="removelazyload {% if product.variants.size > 1 %}{% if image-id != select-var-id %}hide-this-var{% endif %}{% endif %}"
  src="{{ media | img_url: '800x' }}"
  id="{{ media.id }}"
  alt="{{ media.alt | escape }}"
@@ -95,10 +104,12 @@
 {% else %}
                 <img
                   class="
-                    lazyload
-                    lazyload--fade-in
+                    lazyloaded
+                    lazyload--fade-in {% if product.variants.size > 1 %}{% if image-id != select-var-id %}hide-this-var{% endif %}{% endif %}
                   "
                   loading="lazy"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" 
+                  data-src="{{ media | img_url: '800x' }}"
                   id="{{ media.id }}"
                   alt="{{ media.alt | escape }}"
                   data-zoom-src="{{ image_5000x }}"

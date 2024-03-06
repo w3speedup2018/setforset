@@ -7,6 +7,7 @@
 {% if template contains 'product' %}<link rel="preload" href="{{ product.media.first | img_url: '1200x' }}" as="image">{% endif %}
 
 <!-- Preload Assets -->
+{% comment %}
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" as="style">
 <link rel="preload" href="https://xx21lw6rdd5xn6uo-16337705.shopifypreview.com/cdn/shop/t/51/assets/bold-upsell-custom.css" as="style">
 <link rel="preload" href="{{ 'vendors.js' | asset_url }}" as="script">
@@ -18,3 +19,4 @@
 {{ 'preload.js' | asset_url | script_tag }}{% endunless %}
 <link rel="preload" href="{{ 'jquery.js' | asset_url }}" as="script">
 <link rel="preload" href="{{ 'app.js' | asset_url }}" as="script">
+{% endcomment %}

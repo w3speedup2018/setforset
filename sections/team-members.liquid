@@ -15,7 +15,7 @@
           {%- for block in section.blocks -%}
             <div class="single-member">
               <div class="member-image">
-                <img src="{{ block.settings.member_image | img_url : '300x' }}">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="{{ block.settings.member_image | img_url : '300x' }}">
               </div>
               <div class="member-details">
                 {%- if block.settings.member_name !=blank -%}

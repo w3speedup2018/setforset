@@ -188,7 +188,7 @@
 
 <div class="one-whole column">
   <div class="description">
-    {{ product.description }}
+    {{ product.description | replace: 'iframe', 'iframelazy' | replace: 'src="https://www.youtube.com', 'data-class="LazyLoad" data-src="https://www.youtube.com'}}
   </div>
 </div>
 
