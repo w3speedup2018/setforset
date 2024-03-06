@@ -1,0 +1,82 @@
+{% include 'include-selected-blog' %}
+<script>
+    const gridItems = document.querySelectorAll('.blogpost_grid-item ');
+    gridItems.forEach((item, index) => {
+      if (index >= 3) {
+        item.classList.add('blogpost-grid-second-row');
+      }
+    });
+  </script>
+{% schema %}
+
+{
+  "name": "Review Blogposts",
+  "class": "shopify-section--blog-posts",
+  "max_blocks": 7,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Blog posts"
+    },
+    {
+      "type": "url",
+      "id": "title_url",
+      "label": "Heading Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_tags",
+      "label": "Show tags",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_comment_count",
+      "label": "Show comment count",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "read_more_link",
+      "label": "Show continue reading link",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Single Blogpost",
+      "type": "single_blogpost",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Review Blogposts",
+    "category": "Blog"
+  }],
+  "templates": [
+    "index",
+    "product",
+    "page"
+  ]
+}
+{% endschema %}

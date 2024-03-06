@@ -1,0 +1,59 @@
+{% if article.metafields.faq.question1 != blank %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+      {% if article.metafields.faq.question1 != blank or  article.metafields.faq.answer_1 != blank %}
+      {
+        "@type": "Question",
+        "name": "{{ article.metafields.faq.question1 }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ article.metafields.faq.answer_1 }}"
+        }
+      } 
+{% endif %}
+{% if article.metafields.faq.question_2 != blank or  article.metafields.faq.answer_2 != blank %}
+      ,{
+        "@type": "Question",
+        "name": "{{ article.metafields.faq.question_2 }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ article.metafields.faq.answer_2 }}"
+        }
+      } 
+{% endif %}
+{% if article.metafields.faq.question_3 != blank or  article.metafields.faq.answer_3 != blank %}
+      ,{
+        "@type": "Question",
+        "name": "{{ article.metafields.faq.question_3 }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ article.metafields.faq.answer_3 }}"
+        }
+      } 
+{% endif %}
+{% if article.metafields.faq.question_4 != blank or  article.metafields.faq.answer_4 != blank %}
+      ,{
+        "@type": "Question",
+        "name": "{{ article.metafields.faq.question_4 }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ article.metafields.faq.answer_4 }}"
+        }
+      }
+{% endif %}
+{% if article.metafields.faq.question_5 != blank or  article.metafields.faq.answer_5 != blank %}
+      ,{
+        "@type": "Question",
+        "name": "{{ article.metafields.faq.question_5 }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text":"{{ article.metafields.faq.answer_5 }}"}
+      }
+{% endif %}
+    ]
+    }
+    </script>
+{% endif %}

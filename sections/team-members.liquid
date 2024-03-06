@@ -1,0 +1,175 @@
+<section class="section member_sec">
+  <div class="container main-wrapper">
+    <div class="
+        one-whole
+        column
+        page
+      ">
+        <div class="team-sec-header">
+          <h2 class="team-title">{{ section.settings.sec_title }}</h2>
+          {%- if section.settings.sec_desc !=blank -%}
+          <p class="team-desc">{{ section.settings.sec_desc }}</p>
+          {%- endif -%}
+        </div>
+        <div class="members-grid column">
+          {%- for block in section.blocks -%}
+            <div class="single-member">
+              <div class="member-image">
+                <img src="{{ block.settings.member_image | img_url : '300x' }}">
+              </div>
+              <div class="member-details">
+                {%- if block.settings.member_name !=blank -%}
+                <h3 class="member-name">{{ block.settings.member_name }}</h3>
+                {%- endif -%}
+                {%- if block.settings.member_job !=blank -%}
+                <p class="member-job">{{ block.settings.member_job | strip_html }}</p>
+                {%- endif -%}
+                {%- if block.settings.member_cert !=blank -%}
+                <p class="member-cert">{{ block.settings.member_cert | strip_html }}</p>
+                {%- endif -%}
+                {%- if block.settings.member_desc !=blank -%}
+                <p class="member-desc">{{ block.settings.member_desc | newline_to_br }}</p>
+                {%- endif -%}
+                
+                <div class="social-icons">
+
+                {% if block.settings.fb_url != blank %}
+                  <a href="{{ block.settings.fb_url }}" class="ss-icon" target="_blank">
+                    <span class="icon-facebook"></span>
+                  </a>
+                {% endif %}  
+                {% if block.settings.twitter_url != blank %}
+                  <a href="{{ block.settings.twitter_url }}" class="ss-icon" target="_blank">
+                    <span class="icon-twitter"></span>
+                  </a>
+                {% endif %}
+              
+                {% if block.settings.insta_url != blank %}
+                  <a href="{{ block.settings.insta_url }}" class="ss-icon" target="_blank">
+                    <span class="icon-instagram"></span>
+                  </a>
+                {% endif %}
+              
+                {% if block.settings.linkedin_url != blank %}
+                  <a href="{{ block.settings.linkedin_url }}" class="ss-icon" target="_blank">
+                    <span class="icon-linkedin"></span>
+                  </a>
+                {% endif %}
+
+                {% if block.settings.email_url != blank %}
+                  <a href="{{ block.settings.email_url }}" class="em-icon" target="_blank">
+                    {%- render "icon-email" -%}
+                  </a>
+                {% endif %}
+            
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+  </div>
+</section>
+
+<style>
+@media (max-width:767px){
+  .ss-icon {
+    font-size: 40px;
+  }
+  .em-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+</style>
+
+{% schema %}
+  {
+    "name": "Team Member",
+    "class": "team-section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "sec_title",
+        "label": "Section Title"
+      },
+      {
+        "type": "richtext",
+        "id": "sec_desc",
+        "label": "Description"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "block",
+        "name": "Team Member",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "member_image",
+            "label": "Select image"
+          },
+          {
+            "type": "header",
+            "content": "Member details"
+          },
+          {
+            "type": "text",
+            "id": "member_name",
+            "label": "Member Name"
+          },
+          {
+            "type": "text",
+            "id": "member_job",
+            "label": "Job Title"
+          },
+          {
+            "type": "text",
+            "id": "member_cert",
+            "label": "Certifications"
+          },
+          {
+            "type": "textarea",
+            "id": "member_desc",
+            "label": "Member Description"
+          },
+          {
+            "type": "header",
+            "content": "Social Media Links"
+          },
+          {
+            "type": "url",
+            "id": "fb_url",
+            "label": "Facebook"
+          },
+          {
+            "type": "url",
+            "id": "twitter_url",
+            "label": "Twitter"
+          },
+          {
+            "type": "url",
+            "id": "linkedin_url",
+            "label": "LinkedIn"
+          },
+          {
+            "type": "url",
+            "id": "insta_url",
+            "label": "Instagram"
+          },
+          {
+            "type": "url",
+            "id": "email_url",
+            "label": "Email"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Team Members",
+        "category": "team"
+      }
+    ]
+  }
+{% endschema %}

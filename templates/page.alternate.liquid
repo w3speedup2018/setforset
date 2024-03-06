@@ -1,0 +1,34 @@
+<div id="slide-page">
+    <div class="bcg"
+        data-bottom-top="background-position: 50% 200px;"
+        data-top-bottom="background-position: 50% -200px;"
+        data-anchor-target="#slide-page">
+        <div class="hsContainer">
+         <div class="hsContent">
+           <!-- INSERT CODE FOR HEADLINE, SUBTITLE AND BUTTON BELOW -->
+<h1 class="headline" style="color:{{settings.banner_color}}"></h1>
+           <p class="subtitle" style="color:{{settings.banner_color}}"></p>
+         </div>
+        </div>
+    </div>
+</div>
+
+<a name="pagecontent" id="pagecontent"></a>
+<div class="container">
+<br class="clear" />
+<div class="ten columns offset-by-three page clearfix">
+  <h1 class="center">
+    {{ page.title }}
+  </h1>
+  <div class="feature_divider"></div>
+  <div>
+    {{ page.content }}
+  </div>
+  <script>!function(){if(!window.campaign)throw new Error("VL snippet not found");function e(e){try{let t=e.src.split("post-json?")[1].split("&"),n={};for(let e of t){let t=e.split("=");n[decodeURIComponent(t[0])]=decodeURIComponent(t[1])}let o=n.EMAIL;window.campaign.referrer&&window.campaign.referrer.referralCode&&window.campaign.cacheReferrer({email:o,referrer:window.campaign.referrer})}catch(e){}}const t=Element.prototype.insertBefore;Element.prototype.insertBefore=function(n,o){return n.src&&e(n),t.call(this,...arguments)};const n=Element.prototype.append;Element.prototype.append=function(){for(let t of arguments)t.src&&e(t);return n.call(this,...arguments)};const o=Element.prototype.appendChild;Element.prototype.appendChild=function(){let t=arguments[0];return t.src&&e(t),o.call(document.head,...arguments)}}();</script>
+<script>!function(){var a=window.VL=window.VL||{};return a.instances=a.instances||{},a.invoked?void(window.console&&console.error&&console.error("VL snippet loaded twice.")):(a.invoked=!0,void(a.load=function(b,c,d){var e={};e.publicToken=b,e.config=c||{};var f=document.createElement("script");f.type="text/javascript",f.id="vrlps-js",f.defer=!0,f.src="https://app.viral-loops.com/client/vl/vl.min.js";var g=document.getElementsByTagName("script")[0];return g.parentNode.insertBefore(f,g),f.onload=function(){a.setup(e),a.instances[b]=e},e.identify=e.identify||function(a,b){e.afterLoad={identify:{userData:a,cb:b}}},e.pendingEvents=[],e.track=e.track||function(a,b){e.pendingEvents.push({event:a,cb:b})},e.pendingHooks=[],e.addHook=e.addHook||function(a,b){e.pendingHooks.push({name:a,cb:b})},e.$=e.$||function(a){e.pendingHooks.push({name:"ready",cb:a})},e}))}();var campaign=VL.load("JO9juvC3KGJEzLZn2RQTnNPraOY",{autoLoadWidgets:!0});</script>
+</div>
+
+<style>
+#slide-page .bcg {background-image:url("https://cdn.shopify.com/s/files/1/1633/7705/files/JMJ_banner_8_copy.png?15607814171069727276");}
+#slide-page .hsContainer { height: 300px; }
+</style> 

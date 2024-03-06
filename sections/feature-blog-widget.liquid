@@ -1,0 +1,120 @@
+<section class="bg-dark feature-posts-widget">
+  <div class="row feature-widget-row">
+    {% assign countItem = 0 %}
+    {% paginate blogs.news.articles by 999 %}
+    {% for article in blogs.news.articles %}
+      {% if article.tags contains "Featured" %}
+    {% if countItem < 1 %}
+    <div class="col-lg-8 pl-0 feature-main-bg" style="background:url('{{ article.image | img_url: '2048x' }}')">
+      
+      <div class="feature-main-card">
+        <div class="feature-img">
+          <a href="{{ article.url }}">
+          <img  src="{{ article.image | img_url: '100x' }}"
+             alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+             data-src="{{ article.image | img_url: '800x' }}"
+             class="lazyload lazyload--fade-in"
+             style="max-width: {{- article.image.width -}}px"
+             data-sizes="auto"
+             data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+             />
+          </a>
+        </div>
+        <div class="fature-content">
+          <p>
+            {% assign tagcount = 0 %}
+            {% for tag in article.tags %}
+              {% if tagcount < 1 %}
+                  {% if tag == 'News' or tag == 'Nutrition' or tag == 'Equipment' or tag == 'Science' or tag == 'Training' or tag == 'Reviews'  %}
+                      {% if tag == 'Training' %}
+                      		<a href="/blogs/news/tagged/{{ tag }}" class="tags">{{ tag }}</a>
+                      {% else %}
+                            <a href="/blogs/news/tagged/{{ tag }}" class="tags">{{ tag }}</a>
+                      {% endif %}
+            		{% assign tagcount = tagcount | plus: 1 %}
+                  {% endif %}
+                {% endif %}
+        	{%- endfor -%}
+          </p>
+          <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+          <p class="mb-0"><span class="fz1 caps ls2-1/2 author">
+                <span class="iconnit iconnit-user2 fz2 gray-darken-3"></span> {{ 'blogs.article.by_author' | t: author: article.author }}</p>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="col-lg-4">
+      
+      <div class="feature-list-wrapper">
+    {% endif %}
+    {% if countItem != 0 %}
+    {% if countItem < 5 %}
+        <div class="list-feature row">
+          <div class="col-4">
+            <a href="{{ article.url }}">
+              <img  src="{{ article.image | img_url: '100x' }}"
+             alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+             data-src="{{ article.image | img_url: '800x' }}"
+             class="lazyload lazyload--fade-in"
+             style="max-width: {{- article.image.width -}}px"
+             data-sizes="auto"
+             data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+             />
+            </a>
+          </div>
+          <div class="col-8 feature-list-content">
+            <h4><a href="{{ article.url }}">{{ article.title }}</a></h4>
+            <p>
+              {% assign tagcount = 0 %}
+              {% for tag in article.tags %}
+                {% if tagcount < 1 %}
+                   {% if tag == 'News' or tag == 'Nutrition' or tag == 'Equipment' or tag == 'Science' or tag == 'Training' or tag == 'Reviews'  %}
+              		  {% if tag == 'Training' %}
+                      		<a href="/blogs/news/tagged/{{ tag }}" class="tags">{{ tag }}</a>
+                      {% else %}
+                            <a href="/blogs/news/tagged/{{ tag }}" class="tags">{{ tag }}</a>
+                      {% endif %}
+                      {% assign tagcount = tagcount | plus: 1 %}
+                    {% endif %}
+                  {% endif %}
+              {%- endfor -%}
+            </p>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% assign countItem = countItem | plus: 1 %}
+    	{% endif %}
+      	{% endfor %}
+        {% endpaginate %}
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Feature Blog Widget",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

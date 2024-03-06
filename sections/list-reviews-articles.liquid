@@ -1,0 +1,95 @@
+<section class="custom-post-widgets">
+  <div class="custom-container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="custm-cat-title"><a href="/blogs/news/tagged/Reviews">Reviews <span class="inline-block ml1 iconnit iconnit-chevron-right-circle md-down-fz6 md-fz8 nudge-up-3 gray-lighten-2"></span></a></h2>  
+      </div>
+      {% assign countItem = 0 %}
+      {% paginate blogs.news.articles by 999 %}
+      {% for article in blogs.news.articles %}
+      {% if article.tags contains "Reviews" %}
+      {% if countItem < 1 %}
+      <div class="col-lg-6 col-md-12 mb-30">
+        <div class="widget-first-post" style="background:url('{{ article.image | img_url: '2048x' }}')">
+          <div>
+            <a href="{{ article.url }}">
+          <img  src="{{ article.image | img_url: '100x' }}"
+             alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+             data-src="{{ article.image | img_url: '800x' }}"
+             class="lazyload lazyload--fade-in"
+             style="max-width: {{- article.image.width -}}px"
+             data-sizes="auto"
+             data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+             />
+            </a>
+        </div>
+        <div class="content-posts">
+          <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+          <p class="mb-0"><span class="fz1 caps ls2-1/2 author">
+                <span class="iconnit iconnit-user2 fz2 gray-darken-3"></span> {{ 'blogs.article.by_author' | t: author: article.author }}</p>
+        </div>
+      </div>
+      </div>
+      {% endif %}
+      {% if countItem != 0 %}
+      {% if countItem < 7 %}
+      <div class="col-lg-3 col-md-4 col-sm-6 post-list-widget">
+        <div class="small-posts">
+          <div class="sm-post-img" style="background:url('{{ article.image | img_url: '2048x' }}')">
+              <a href="{{ article.url }}">
+                <img  src="{{ article.image | img_url: '100x' }}"
+                alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+                data-src="{{ article.image | img_url: '800x' }}"
+                class="lazyload lazyload--fade-in"
+                style="max-width: {{- article.image.width -}}px"
+                data-sizes="auto"
+                data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+                  />
+            </a> 
+          </div>
+          <div class="sm-post-content">
+            <h3>
+              <a href="{{ article.url }}">
+                {{ article.title }}
+              </a>
+            </h3>
+            <p class="mb-0"><span class="fz1 caps ls2-1/2 author">
+                <span class="iconnit iconnit-user2 fz2 gray-darken-3"></span> {{ 'blogs.article.by_author' | t: author: article.author }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% assign countItem = countItem | plus: 1 %}
+    {% endif %}
+      {% endfor %}
+      {% endpaginate %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "List Reviews Articles",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,206 @@
+<style>
+
+    .set-author-container-main{
+        width: 100%;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 4px rgb(0 0 0 / 30%);
+        border-left: 4px solid #D4A017;
+        padding: 20px;
+    }
+    .set-author-container{
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-family: inherit;
+    }
+  
+    .set-author-container h3, .set-author-container p{
+        margin: 0;
+    }
+    .author__name a, .set-author-meta a {
+      color: #000;
+    }
+    .set-author-meta h3{
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 26px;
+    }
+
+    .set-author-meta{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .set-author-container > img{
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+    }
+
+    .set-author-fact-check{
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .set-author-fact-check > span{
+        padding: 0px 7px;
+        border: 2px solid #D4A017;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 32px;
+    }
+
+    .set-author-fact-check img{
+        width: 16px;
+        margin-bottom: 0px;
+    }
+
+    .set-author-container .underline{
+        text-decoration: underline;
+    }
+
+    .set-author-fact-check > p{
+        font-size: 16px;
+        letter-spacing: 2px;
+        flex: 0 0 75%;
+    }
+
+
+    .set-author-fact-check .fact-span{
+      font-size: 12px;
+    }
+
+    .set-method{
+        width: 100%;
+        font-size: 15px;
+        border-top: 1px solid #ddd;
+        margin-top: 16px;
+        padding-top: 10px;
+    }
+    
+    .st_author_img {
+      margin: 0;
+      padding-right: 0;
+    }
+    .st_author_info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .st_author_info h6 {
+      font-weight: 600;
+    }
+    @media screen AND (max-width: 1100px){
+
+        .set-author-fact-check{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .set-author-fact-check > p{
+            display: flex;
+            flex-direction: column;
+            line-height: 20px;
+            font-size: 13px;
+        }
+
+        .set-author-meta h3{
+            font-size: 13px;
+        }
+
+        .set-author-container{
+          align-items: flex-start;
+          padding: 12px;
+        }
+
+      .set-author-meta{
+        gap: 4px;
+      }
+
+    }
+    @media (max-width: 575px) {
+      .set-author-container {
+        padding: 0;
+      }
+    }
+
+</style>
+
+
+<div class="set-author-container-main">
+
+    <div class="set-author-container">
+
+
+        {% if article.metafields.custom.author_image != blank %}
+
+            <img src="{{ article.metafields.custom.author_image | img_url }}" />
+
+        {% endif %}
+
+        <div class="set-author-meta">
+          {% if article.metafields.custom.written_by != blank %}
+            <h3>
+              Written by
+              <a href="{{ article.metafields.custom.author_details_page }}"
+                ><span class="underline">{{ article.metafields.custom.written_by }}</span></a
+              >
+              {%- if article.metafields.custom.author_credentials != blank -%}
+                 <span> | </span><span>{{ article.metafields.custom.author_credentials }}</span>
+              {%- endif %}
+          </h3>
+          {% endif %}
+            {% if article.metafields.custom.fact_checked_by != blank %}
+
+
+                <div class="set-author-fact-check">
+
+                    <p>
+                        Fact checked by <span class="underline">{{ article.metafields.custom.fact_checked_by }}</span>
+                    </p>
+
+                    <span>
+                    <img src="https://cdn.shopify.com/s/files/1/1633/7705/files/check.svg?v=1672906443" alt="">
+                    <span class="fact-span">FACT CHECKED</span>
+                </span>
+
+                </div>
+
+
+            {% endif %}
+
+
+
+        </div>
+
+
+
+    </div>
+
+    {% if article.metafields.custom.methodology != blank %}
+
+    <div class="set-method">
+        <strong>Methodology</strong><br />
+        {{ article.metafields.custom.methodology }}
+        <a href="{% if article.metafields.custom.methodology_button_link != blank %}{{ article.metafields.custom.methodology_button_link }}{% else %}/pages/product-review-guidelines{% endif %}">Learn More</a>
+    </div>
+
+    {% endif %}
+    {% if article.metafields.custom.affiliate_disclosure_title != blank %}
+
+    <div class="set-method">
+        <strong>Affiliate Disclosure</strong><br />
+        {{ article.metafields.custom.affiliate_disclosure_title }}
+        <a href="{% if article.metafields.custom.affiliate_disclosure_buttom_link != blank %}{{ article.metafields.custom.affiliate_disclosure_buttom_link }}{% else %}/pages/disclaimers-disclosures{% endif %}">Learn More</a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+

@@ -1,0 +1,130 @@
+{% comment %}
+** Blog posts - dynamic **
+- Draggable section
+{% endcomment %}
+
+{% comment %} Assign object as block or section {% endcomment %}
+{% if type == 'block' %}
+{%- assign object = block -%}
+{% else %}
+{%- assign object = section -%}
+{% endif %}
+
+{% comment %} Content settings {% endcomment %}
+{%- capture title -%}
+<a href="{{ blog.url }}">
+  {{ object.settings.title | escape }}
+</a>
+{%- endcapture -%}
+
+{% comment %} End content settings {% endcomment %}
+
+<section class="section training-nutrtion-blog include-featured-blog">
+  <div class="container">
+    {% if section.settings.title != blank %}
+    <div class="one-whole column section heading-container nt_heading">
+      <div class="line"></div>
+      <h3 class="title">
+        <a href="{{ object.settings.title_url }}">{{ object.settings.title }}</a>
+      </h3>
+      <div class="line"></div>
+    </div>
+    {% endif %}
+  
+
+    
+    <div class="blogposts_grid">
+      {% for block in section.blocks %}
+      {%- case block.type -%}
+      {%- when 'single_blogpost_nt' -%}
+      {%- assign article = block.settings.article_nt -%}
+        <div class="blogpost_grid-item_nt  column medium-down--one-whole article">
+          {% if article.image %}
+            <a class="artcle-img" href="{{ article.url }}" title="{{ article.title | escape }}">
+              {% render 'image-element', image: article.image, alt: article.image.alt %}
+            </a>
+          {% endif %}
+
+          {% if object.settings.blog_tags %}
+            <div class="blog_meta tags">
+              {% for tag in article.tags %}
+                <span>
+                  <a
+                    href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                    title="{{ blog.title | escape }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}"
+                  >
+                    {{ tag }}
+                  </a>
+                </span>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <div class="blog-inner">
+            <div class="absolute pos-0-all height-100 col-12">
+              <div class="blog-inner-details flex flex-column height-100">
+                <p class="blog_meta author-details">
+                  <span class="fz1 caps ls2-1/2">
+                    
+                      <span>
+                        {% if object.settings.blog_author %}By <a href="{{ article.metafields.custom.author_details_page }}">{{ article.metafields.custom.written_by }}</a>{% endif %}{% if object.settings.blog_date %} | {{ article.published_at | date: format: 'month_day_year' }}{% endif %}
+                      </span>                  
+
+                    {% if object.settings.blog_comment_count %}
+                      {% if settings.disqus_enabled %}
+                        <span>
+                          <a
+                            href="{{ article.url }}#disqus_thread"
+                            data-disqus-identifier="{{ article.id }}"
+                            class="disqus-comment-count"
+                          >
+                            {{ 'blogs.counts.comments_with_count' | t: count: 0 }}
+                          </a>
+                        </span>
+                      {% elsif article.comments_enabled? and article.comments_count > 0 %}
+                        <span>
+                          <a href="{{ article.url }}#comments">
+                            {{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}
+                          </a>
+                        </span>
+                      {% endif %}
+                    {% endif %}
+                  </span>
+                </p>
+                <h5 class="sub_title">
+                  <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                    {{ article.title }}
+                  </a>
+                </h5>
+
+                {% if article.excerpt != blank %}
+                  {%- assign postexcerpt = article.excerpt | size -%}
+                  {% if postexcerpt > 100 %}
+                    {%- assign excerptlength = 'lg' -%}
+                  {% elsif postexcerpt <= 50 %}
+                    {%- assign excerptlength = 'sm' -%}
+                  {% endif %}
+                  <div class="excerpt excerpt-length--{{ excerptlength }} {{ postexcerpt }}">
+                    {{ article.excerpt }}
+                    <span class="truncation-fade"></span>
+                  </div>
+                {% endif %}
+
+                {% if object.settings.read_more_link %}
+                  <p class="continue_reading">
+                    <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                      {{ 'blogs.general.continue_reading_html' | t }}
+                      <span class="icon-arrow-right"></span>
+                    </a>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+  {%- endcase -%}
+  {% endfor %}
+
+</div>
+
+  </div>
+</section>

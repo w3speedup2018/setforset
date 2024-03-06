@@ -1,0 +1,1 @@
+{"sections":{"main":{"type":"search-template","blocks":{"block-1":{"type":"filter","disabled":true,"settings":{"show_filter_product_count":true}}},"block_order":["block-1"],"settings":{"search_breadcrumb":true,"products_per_row":3,"pagination_limit":48,"blog_author":false,"read_more_link":true,"blog_date":true,"toggle":false}}},"order":["main"]}

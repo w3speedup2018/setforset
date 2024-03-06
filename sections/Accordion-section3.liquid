@@ -1,0 +1,106 @@
+<div class="html-section-accordian-wrap">
+  <div class="html-section-accordian">
+        {% if product.metafields.accordion_title3.text != blank %}
+    <div class="html-section-accordian-row">
+      <div class="html-section-accordian-title html-section-accordian3-title">+ {{ product.metafields.accordion_title3.text }}</div>
+      <div class="html-section-accordian-content html-section-accordian-content3">
+        <div class="accordion-content-image-secion">
+          <div class="col-md-6" style="border-right: 1px solid #000;">
+            <img src="{{ product.metafields.acc_3_c_1st_imgurl.text }}">
+			{{ product.metafields.acc_3_c_1st_img_tit.text }}
+          </div>
+          <div class="col-md-6" style="border-left: 1px solid #000;">
+            <img src="{{ product.metafields.acc_3_c_2nd_imgurl.text }}">
+            {{ product.metafields.acc_3_c_2nd_img_tit.text }}
+          </div>
+        </div>
+        <div class="accordion-content-secion">
+          {{ product.metafields.acc_3_main_content.text }}
+        </div>
+      </div>
+          
+    </div>
+    {% endif %}
+  </div>
+</div>
+<style>
+  .html-section-accordian-row{
+    background: url(https://cdn.shopify.com/s/files/1/1633/7705/files/Footer-grid.png?v=1657397781);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    border-top:3px solid;
+  }
+  .html-section-accordian-row:last-child{
+    border-bottom:3px solid;
+  }
+  .html-section-accordian-title{
+    padding: 30px 15px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    cursor:pointer;
+  }
+  .html-section-accordian-content{
+    display:none;
+    padding:0 15px;
+  }
+  .html-section-accordian-content3{
+      max-width: 1000px;
+      margin: auto;
+  }
+  .html-section-accordian-content3 .accordion-content-image-secion{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px 200px;
+  }
+  .html-section-accordian-content3 .accordion-content-image-secion .col-md-6{
+      flex: 0 0 50%;
+      max-width: 50%;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+  }
+  .html-section-accordian-content3 .accordion-content-image-secion .col-md-6 img{
+      display: inline-block;
+      margin-bottom: 20px;
+  }
+  .html-section-accordian-content3 .accordion-content-image-secion p, .html-section-accordian-content3 .accordion-content-secion p{
+      font-size: 20px;
+      line-height: 28px;
+      margin: 0 0 10px;
+      text-align: center;
+  }
+  @media(max-width: 576px){
+      .html-section-accordian-content3 .accordion-content-image-secion{
+          padding: 20px 10px;
+      }
+      .html-section-accordian-content2 .accordion-content.col-md-6{
+          flex: 0 0 100%;
+          max-width: 100%
+      }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Accordion Section 3",
+    "settings": [], 
+    "presets": [
+      {
+        "name": "Accordion Section 3",
+        "category": "Image"
+      }
+    ],
+    "templates": [
+      "index",
+      "product",
+      "page",
+      "list-collections",
+      "collection",
+      "blog",
+      "article"
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,532 @@
+<section class="section">
+  <div class="main_heading aFlex">
+    <div class="about_heading">
+      <h1 class="gobal_orange m0">About {{ page_title }}</h1>
+    </div>
+    <div class="about_the_author">
+      <p class="gobal_black m0">About The Author</p>
+    </div>
+  </div>
+  <div class="entry-author archive">
+    <div class="entry-author-body">
+      <img
+        src="{{ section.settings.author_image | img_url:'' }}"
+        class="avatar avatar-300 current-author photo"
+        height="300"
+        width="300"
+      >
+      <div class="entry-author-name ">
+        <div class="basicinfo">
+          <h3 class="fn m0">
+            {{ page_title -}}
+            {% if section.settings.author_credentials != blank %}
+              <span>-{{ section.settings.author_credentials }}</span>
+            {%- endif %}
+          </h3>
+          <p class="screen-job m0">{{ section.settings.author_designation }}</p>
+          <a href="mailto:{{ section.settings.author_email }}" class="emaillink">{{ section.settings.author_email }}</a>
+        </div>
+        <div class="additionalinfo flexed">
+          <div>
+            {% if section.settings.author_certifications != blank %}
+              <p class="screen-hasCredential m0 gobal_black">
+                <strong> Certifications: </strong>
+                {{ section.settings.author_certifications }}
+              </p>
+            {% endif %}
+            {% if section.settings.author_education != blank %}
+              <p class="screen-alumniof m0 gobal_black">
+                <strong> Education: </strong>
+                {{ section.settings.author_education }}
+              </p>
+            {% endif %}
+          </div>
+          <div class="entry-author-social king-text-align-right">
+            {% if section.settings.facebook_url != blank %}
+              <a area-label="facebook" href="{{ section.settings.facebook_url }}">
+                <i class="fab fa-facebook-square"></i>
+              </a>
+            {% endif %}
+            {% if section.settings.twitter_url != blank %}
+              <a area-label="twitter" href="{{ section.settings.twitter_url }}">
+                <i class="fab fa-twitter-square"></i>
+              </a>
+            {% endif %}
+            {% if section.settings.linkdin_url != blank %}
+              <a area-label="linkedin" href="{{ section.settings.linkdin_url }}">
+                <i class="fa-brands fa-linkedin"></i>
+              </a>
+            {% endif %}
+            {% if section.settings.instagram_url != blank %}
+              <a area-label="instagram" href="{{ section.settings.instagram_url }}">
+                <i class="fab fa-instagram"></i>
+              </a>
+            {% endif %}
+            {% if section.settings.web_url != blank %}
+              <a area-label="instagram" href="{{ section.settings.web_url }}">
+                <i class="fa-solid fa-globe"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="entry-author-content">
+        <p class="gobal_black">
+          {{ section.settings.author_description }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="Author_Blog_posts blog">
+    <div class="Author_posts_top_heading">
+      <h3 class="gobal_black">See All of {{ page_title }}'s Articles</h3>
+    </div>
+    <div>
+      {% assign blog_counter = blogs.news.articles_count %}
+      {%- paginate blogs.news.articles by blog_counter -%}
+        {% assign count_page_current = paginate.current_page %}
+        {% assign count_page_current = paginate.current_page %}
+        {% assign limit = 12 %}
+        {% assign max-limit = limit | times: count_page_current %}
+        {% assign min-limit = max-limit | minus: limit %}
+        {% assign blog_post_counter = min-limit %}
+        <div class="blog_post_tiles_Wrapper">
+          {% for article in blogs.news.articles limit: 1000 %}
+            {% if article.metafields.custom.written_by == page_title %}
+              <div class="blog_post_tiles">
+                {% if article.image != blank %}
+                  <div class="article_image">
+                    <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                      {% render 'image-element', image: article.image, alt: article.image.alt %}
+                    </a>
+                  </div>
+                {% endif %}
+                <div class="blog_meta tags">
+                  {% comment %}
+                    {% for tag in article.tags %}
+                      <span
+                        ><a
+                          href="{{ shop.url }}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}"
+                          title="{{ blog.title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}"
+                        >
+                          {{- tag -}}
+                        </a></span
+                      >
+                    {% endfor %}
+                  {% endcomment %}
+                  <h2>
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                  </h2>
+
+                  <p class="blog_meta">
+                    {% comment %}   <span>{{ 'blogs.article.by_author' | t: author: article.author }}</span> {% endcomment %}
+                    <span>{{ article.published_at | date: format: 'month_day_year' }}</span>
+                  </p>
+                  <p>
+                    <a class="readmore" href="{{ article.url }}" title="{{ article.title | escape }}">
+                      {{- 'blogs.general.continue_reading_html' | t }}
+                      <span class="icon-arrow-right"></span
+                    ></a>
+                  </p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav role="navigation">
+            <ol class="pagination">
+              {%- if paginate['previous-'] %}
+                <li>
+                  <a href="{{ paginate.previous.url }}">
+                    <span aria-hidden="true">&laquo;</span>
+                    Previous <span class="visuallyhidden">page</span>
+                  </a>
+                </li>
+              {%- else -%}
+                <li class="disabled">
+                  <span aria-hidden="true">&laquo;</span>
+                  Previous <span class="visuallyhidden">page</span>
+                </li>
+              {%- endif -%}
+
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <li>
+                    <a href="{{ part.url }}"> <span class="visuallyhidden">page</span> {{ part.title }} </a>
+                  </li>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <li class="active" aria-current="page">
+                      <span class="visuallyhidden">page</span> {{ part.title }}
+                    </li>
+                  {%- else -%}
+                    <li><span class="visuallyhidden">page</span> {{ part.title }}</li>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if paginate.next -%}
+                <li>
+                  <a href="{{ paginate.next.url }}">
+                    Next <span class="visuallyhidden">page</span>
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {%- else -%}
+                <li class="disabled">
+                  Next <span class="visuallyhidden">page</span>
+                  <span aria-hidden="true">&raquo;</span>
+                </li>
+              {%- endif -%}
+            </ol>
+          </nav>
+        {%- endif -%}
+      {% endpaginate %}
+    </div>
+  </div>
+</section>
+<style>
+   .visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap;
+  }
+  .readmore, .readmore > .icon-arrow-right {
+    color: #d4a017 !important;
+  }
+  .readmore:hover, .readmore:hover > .icon-arrow-right{
+        color: #2c3439 !important;
+  }
+  .pagination li {
+    display: inline;
+    margin: 0 5px;
+  }
+  .blog_post_tiles_Wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 0;
+  }
+  .blog_post_tiles {
+    width: calc(33.33333% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 30px;
+  }
+  .Author_Blog_posts [role="navigation"]{
+    display:none;
+  }
+  .gobal_orange{
+    color:#d4a017;
+  }
+  .gobal_black{
+    color:#000;
+  }
+  .aFlex{
+    display:flex;
+  }
+  .m0{
+    margin:0;
+  }
+  .about_heading > h1 {
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .about_the_author p {
+    font-size: 16px;
+  }
+  .main_heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .entry-author.archive {
+    box-shadow: 0 100px 0 0 #d4a017 inset;
+    overflow: hidden;
+    position: relative;
+  }
+  .entry-author {
+    margin: 1rem 0 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    line-height: 1.6;
+  }
+  .entry-author.archive:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    width: 100px;
+    height: 100px;
+  }
+  .entry-author.archive:after {
+    content: '';
+    position: absolute;
+    bottom: 70%;
+    right: 0;
+    width: calc(100% - 250px);
+    height: 56px;
+    box-shadow: 40px 0 20px 0 rgb(0 0 0 / 20%);
+    background: #000;
+  }
+  .entry-author.archive .entry-author-body {
+    padding-left: 290px;
+  }
+  .entry-author .entry-author-body {
+    position: relative;
+    min-height: 80px;
+    z-index:1;
+  }
+  .entry-author.archive .entry-author-body .avatar {
+    outline-offset: -36px;
+    position: absolute;
+    left: -30px;
+    top: -30px;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    z-index: 0;
+    border: 40px solid #fff;
+  }
+  .entry-author-body .avatar {
+    box-shadow: 0 0 0px 5px white, 0 0 0px 10px #d4a017;
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  .entry-author.archive .entry-author-name .fn {
+    color: #fff;
+    font-weight: 800;
+    display: block;
+  }
+  .entry-author.archive .screen-job {
+    text-align: right;
+  }
+  .entry-author.archive .basicinfo a {
+    color: #fff;
+    padding-top:3px;
+    position: relative;
+    top: 20px;
+  }
+  .entry-author.archive .basicinfo {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    color: #fff;
+  }
+  .entry-author.archive .additionalinfo.flexed {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    justify-content: space-between;
+  }
+  .entry-author.archive .additionalinfo {
+    padding-top: 40px;
+  }
+  .entry-author.archive .entry-author-social {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .entry-author-social {
+    margin-bottom: 10px;
+  }
+  .king-text-align-right {
+    text-align: left;
+  }
+  .entry-author.archive .entry-author-social a {
+    font-size: 30px;
+    color: #d4a017;
+  }
+  .entry-author-content {
+    border-top: 1px solid #d4a017;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .entry-author-content p {
+    margin: 0.5em 0;
+  }
+  .Author_posts_top_heading h3{
+    text-align:center;
+    margin-top:20px;
+    font-weight: 600;
+  }
+  @media (max-width:1024px){
+    .entry-author p {
+      font-size: 16px;
+    }
+    .emaillink{
+      font-size:16px;
+    }
+    .entry-author.archive .basicinfo a{
+      padding-top:0;
+    }
+  }
+  @media (max-width:800px){
+    .blog_post_tiles {
+      width: 100%;
+      margin-left: 10px;
+      margin-right: 10px;
+      padding-bottom: 30px;
+    }
+  }
+   @media (max-width:768px){
+   .entry-author.archive {
+      box-shadow: 0 440px 0 0 #d4a017 inset;
+    }
+   .entry-author.archive:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #fff;
+      width: 100%;
+      height: 120px;
+    }
+   .entry-author.archive:after {
+      content: '';
+      display:none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(100% - 250px);
+      height: 56px;
+      box-shadow: 40px 0 20px 0 rgba(0,0,0,0.2);
+    }
+   .entry-author.archive .entry-author-body, .entry-author .entry-author-body {
+      padding-left: 0px;
+    }
+   .entry-author.archive .entry-author-body .avatar {
+      width: 200px;
+      height: 200px;
+      outline-offset: 0;
+    }
+    .entry-author.archive .entry-author-body .avatar, .entry-author-body .avatar {
+      position: relative;
+      left: 50%;
+      top: 10px;
+      overflow: hidden;
+      border-radius: 50%;
+      object-fit: cover;
+      transform: translateX(-50%);
+      margin-bottom: 20px;
+    }
+   .entry-author.archive .basicinfo {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .entry-author.archive .basicinfo a {
+      top: 0;
+    }
+   .entry-author.archive .additionalinfo.flexed {
+      flex-direction: column;
+    }
+   .entry-author.archive .screen-job {
+      text-align: center;
+    }
+   .entry-author.archive .entry-author-name .fn {
+      font-size: 18px;
+    }
+   }
+  @media (max-width:768px){
+    .about_heading > h1 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+  }
+</style>
+{% schema %}
+{
+  "name": "Author Details",
+  "tag": "section",
+  "class": "Author_Details",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "author_image",
+      "label": "Author Image"
+    },
+    {
+      "type": "text",
+      "id": "author_credentials",
+      "label": "Author Credentials"
+    },
+    {
+      "type": "text",
+      "id": "author_email",
+      "label": "Author Email"
+    },
+    {
+      "type":"text",
+      "id":"author_designation",
+      "label":"Author Designation"
+    },
+    {
+      "type":"text",
+      "id":"author_certifications",
+      "label":"Author Certifications"
+    },
+    {
+      "type":"text",
+      "id":"author_education",
+      "label":"Author Education"
+    },
+    {
+      "type":"textarea",
+      "id":"author_description",
+      "label":"Author Description"
+    },
+    {
+      "type":"url",
+      "id":"facebook_url",
+      "label":"Facebook Profile Link"
+    },
+    {
+      "type":"url",
+      "id":"twitter_url",
+      "label":"Twitter Profile Link"
+    },
+    {
+      "type":"url",
+      "id":"linkdin_url",
+      "label":"LinkdIN Profile Link"
+    },
+    {
+      "type":"url",
+      "id":"instagram_url",
+      "label":"Instagram Profile Link"
+    },
+    {
+      "type": "url",
+      "id": "web_url",
+      "label": "Website Link"
+    }
+  ],
+  "presets":[
+    {
+      "name":"Author Details"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

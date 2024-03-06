@@ -1,0 +1,84 @@
+<div class="section-faq-wrap">
+  <div class="faq-section-title"><h2>ALWAYS READY PRE-WORKOUT FAQ</h2></div>
+  <div class="feature_divider"></div>
+  <div class="section-faq">
+    {% assign loopcount = 0 %}
+    {% for faq_title in product.metafields.faq_titile.text.value %}
+    <div class="section-faq-row">
+      <div class="section-faq-title">{{ faq_title }}</div>
+      <div class="section-faq-content">{{ product.metafields.faq_content.text.value[loopcount] }}</div>
+    </div>
+    {% assign loopcount = loopcount| plus:1 %}
+    {% endfor %}
+  </div>
+</div>
+<style>
+  .faq-section-title h2{
+    font-size: 28px;
+    line-height: 1.8em;
+    margin: 0 auto 15px;
+    clear: both;
+    font-weight: bold;
+    padding-top: 4px;
+    color: #00000;
+    text-align: center;
+  }
+  .section-faq-row .section-faq-title{
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    position:relative;
+    padding-left:25px;
+    border-bottom: 1px solid rgb(209, 213, 218);
+  }
+  .section-faq-row .section-faq-content{
+    padding: 15px;
+    display: none;
+    border-bottom: 1px solid rgb(209, 213, 218);
+  }
+  .section-faq .section-faq-row .section-faq-title:before{
+    content: '+';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    transform: translateY(-50%);
+  }
+  .section-faq .section-faq-row.open .section-faq-title:before{
+    content: '–';
+  }
+</style>
+<script>
+  $('.section-faq-row .section-faq-title').on('click', function(){
+    $(this).siblings('.section-faq-content').slideToggle();
+    $(this).parent('.section-faq-row').toggleClass('open');
+    $(this).parent('.section-faq-row').siblings('.section-faq-row').find('.section-faq-content').slideUp();
+    $(this).parent('.section-faq-row').siblings('.section-faq-row').removeClass('open');
+  })
+</script>
+{% schema %}
+  {
+    "name": "FAQs Section",
+    "settings": [], 
+    "presets": [
+      {
+        "name": "FAQs Section",
+        "category": "Image"
+      }
+    ],
+    "templates": [
+      "index",
+      "product",
+      "page",
+      "list-collections",
+      "collection",
+      "blog",
+      "article"
+    ]
+  }
+{% endschema %}

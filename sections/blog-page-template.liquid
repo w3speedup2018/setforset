@@ -1,0 +1,80 @@
+{% if section.blocks.size > 0 %}
+<div class="container main content main-wrapper blog-first">
+  <div class="sixteen columns page clearfix featured-blocks">
+    {% for block in section.blocks %}
+    {% assign article = articles[block.settings.featured_article] %}
+    {% if article %}
+    <div class="one-third column alpha article {% if forloop.first == true %}first_featured {% else %}artical_blog_all{% endif %}">
+      {% if article.image %}
+      <a href="{{ article.url }}" title="{{ article.title | escape }}">
+        <img  src="{{ article.image | img_url: '100x' }}"
+             alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+             data-src="{{ article.image | img_url: '2048x' }}"
+             class="lazyload lazyload--fade-in"
+             style="max-width: {{- article.image.width -}}px"
+             data-sizes="auto"
+             data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+             />
+      </a>
+      {% endif %}
+      {% if section.settings.blog_tags %}
+      <div class="blog_meta tags">
+        {% for tag in article.tags %}
+        <span><a href="{{ shop.url}}/blogs/{{ blogs[section.settings.blog_widget_select].handle }}/tagged/{{ tag | handleize }}" title="{{ blogs[section.settings.blog_widget_select].title | escape }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a></span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="blog_meta-first">
+      <h4><a href="{{ article.url }}">{{ article.title }}</a></h4>
+      {% if forloop.first == true %}
+      <p class="blog_meta author-details">
+        <span class="fz1 caps ls2-1/2">
+        <span class="iconnit iconnit-user2 fz2 white"></span>
+        <span>{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+          </span>
+      </p>
+      {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% schema %}
+{
+"name": "Article",
+"settings": [
+{
+"type": "checkbox",
+"id": "blog_tags",
+"label": "Show blog post tags"
+}
+],
+"blocks": [
+{
+"type": "article",
+"name": "Article",
+"settings": [
+{
+"type": "article",
+"id": "featured_article",
+"label": "Article to feature on the blog page"
+}
+]
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

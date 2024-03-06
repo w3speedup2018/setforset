@@ -1,0 +1,92 @@
+<div class="html-section-accordian-wrap">
+  <div class="html-section-accordian">
+      {% if product.metafields.accordion_title2.text != blank %}
+    <div class="html-section-accordian-row">
+      <div class="html-section-accordian-title html-section-accordian2-title"> ⌄ {{ product.metafields.accordion_title2.text }}</div>
+      <div class="html-section-accordian-content html-section-accordian-content2">
+        <div class="accordion-content">
+          <div class="col-md-6">{{ product.metafields.acc_2_c_1st_col.text }}</div>
+          <div class="col-md-6">{{ product.metafields.acc_2_c_2nd_col.text }}</div>
+          </div>
+      </div>
+        {% endif %}
+  </div>
+</div>
+<style>
+  .html-section-accordian-row{
+    background: url();
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    border-top:3px solid;
+  }
+  .html-section-accordian-row:last-child{
+    border-bottom:3px solid;
+  }
+  .html-section-accordian-title{
+    padding: 30px 15px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    cursor:pointer;
+  }
+  .html-section-accordian-content{
+    display:none;
+    padding:0 15px;
+  }
+  .html-section-accordian-content2 .accordion-content{
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  .html-section-accordian-content2 .accordion-content .col-md-6{
+      flex: 0 0 50%;
+      max-width: 50%;
+      padding: 10px;
+      box-sizing: border-box;
+  }
+  .html-section-accordian-content2 .accordion-content .accordion-content-subtitle{
+      font-size: 22px;
+      line-height: 33px;
+      font-weight: 700;
+      margin: 0px;
+      font-family: arial;
+  }
+  .html-section-accordian-content2 .accordion-content .accordion-content-paragraph{
+      font-size: 18px;
+      margin-bottom: 15px;
+  }
+  @media(max-width: 576px){
+      .html-section-accordian-content3 .accordion-content-image-secion{
+          padding: 20px 10px;
+      }
+      .html-section-accordian-content2 .accordion-content.col-md-6{
+          flex: 0 0 100%;
+          max-width: 100%
+      }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Accordion Section 2",
+    "settings": [], 
+    "presets": [
+      {
+        "name": "Accordion Section 2",
+        "category": "Image"
+      }
+    ],
+    "templates": [
+      "index",
+      "product",
+      "page",
+      "list-collections",
+      "collection",
+      "blog",
+      "article"
+    ]
+  }
+{% endschema %}

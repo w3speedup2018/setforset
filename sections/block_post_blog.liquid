@@ -1,0 +1,84 @@
+{% if section.blocks.size > 0 %}
+<div class="container1 main main-wrapper">
+  <div class="container page-blog-post section clearfix featured-blocks">
+    {% for block in section.blocks %}
+    {% assign article = articles[block.settings.featured_article] %}
+    {% if article %}
+    <div class="one-half column medium-down--one-whole article article-post">
+       <h3 class="title">
+              <a href="{{ block.settings.url }}">{{ block.settings.title | escape }} <span class="inline-block ml1 iconnit iconnit-chevron-right-circle md-down-fz6 md-fz8 nudge-up-3 gray-lighten-2 align-middle"></span> </a>
+            </h3>
+      {% if article.image %}
+      <a class="article-banner" href="{{ article.url }}" title="{{ article.title | escape }}">
+        <img  src="{{ article.image | img_url: '100x' }}"
+             alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+             data-src="{{ article.image | img_url: '2048x' }}"
+             class="lazyload lazyload--fade-in"
+             style="max-width: {{- article.image.width -}}px"
+             data-sizes="auto"
+             data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                          {{ article.image | img_url: '1600x' }} 1600w,
+                          {{ article.image | img_url: '1200x' }} 1200w,
+                          {{ article.image | img_url: '1000x' }} 1000w,
+                          {{ article.image | img_url: '800x' }} 800w,
+                          {{ article.image | img_url: '600x' }} 600w,
+                          {{ article.image | img_url: '400x' }} 400w"
+             />
+      </a>
+      {% endif %}
+      <div class="blog-inner1 p2-1/2 absolute z1 left-1-1/1 bottom-1-1/1 right-1-1/1">
+          <div class="blog-post-details">
+            <h4><a href="{{ article.url }}">{{ article.title }}</a> </h4>
+            <div class="flex-auto"></div>
+            <p class="blog_meta author-details">
+              <span class="fz1 caps ls2-1/2">
+                <span class="iconnit iconnit-user2 fz2 gray-darken-3"></span>
+                <span> {{ 'blogs.article.by_author' | t: author: article.author }}</span>
+              </span>
+            </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% schema %}
+{
+"name": "Article",
+"max_blocks": 2,
+"settings": [
+],
+"blocks": [
+{
+"type": "article",
+"name": "Article",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Heading",
+"default": "Blog posts"
+},
+{
+"type": "url",
+"id": "url",
+"label": "Url"
+},
+{
+"type": "article",
+"id": "featured_article",
+"label": "Article to feature on the blog page"
+}
+]
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

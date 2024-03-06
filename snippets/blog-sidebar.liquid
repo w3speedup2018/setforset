@@ -1,0 +1,345 @@
+
+
+{% if findProduct == true %}
+<div class="sidebar four columns sidebarProd">
+  <div class="sidebar_content">
+    {% if section.settings.our-products != blank %}
+    <h4>{{section.settings.our-products}}</h4>{% endif %}
+    {% for tag in article.tags %}
+    {% if tag contains 'product_' %}
+    {% assign handle = tag | split:'_' | last %}
+    {% assign product = all_products[handle] %}
+    <div class="sidebar-block">
+      <div class="product-image">
+        <a href="{{product.url}}">
+          <img src="{{ product.featured_image.src | img_url:'480x'}}" />
+        </a>
+        <p class="product-title">
+          <a href="{{product.url}}">{{product.title}}</a>
+        </p>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if section.blocks.size > 0 %}
+<div class="sidebar sidebar--{{ context }} toggle-all--{{ section.settings.toggle }} four columns">
+  <div class="sidebar_content">
+    {% for block in section.blocks %}
+    <div class="sidebar-block" {{ block.shopify_attributes }}>
+      {% if block.type == 'menu' %}
+      {% assign sidebar_menu = linklists[block.settings.custom_menu_linklist] %}
+      {% if sidebar_menu != blank %}
+      <h4 class="toggle" aria-haspopup="true" aria-expanded="false"><span>+</span>{{ sidebar_menu.title }}</h4>
+      <ul class="blog_list toggle_list">
+        {% for link in sidebar_menu.links %}
+        <li>
+          <a {% if link.active or link.child_active %}class="active"{% endif %} href="{{ link.url }}">{{ link.title }}</a>
+
+          {% if link.links != blank %}
+          <span class="menu-toggle icon-arrow-down {% if link.active or link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if link.active or link.child_active %}true{% else %}false{% endif %}"> </span>
+
+          <ul class="{% if link.active or link.child_active %}active{% endif %}">
+            {% for sub_link in link.links %}
+            <li class="sub-menu {% if sub_link.active or sub_link.child_active %}active{% endif %}">
+              <a {% if sub_link.active %}class="active"{% endif %} href="{{ sub_link.url }}">{{ sub_link.title }}</a>
+
+              {% if sub_link.links != blank %}
+              <span class="menu-toggle icon-arrow-down {% if sub_link.active or sub_link.child_active %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if sub_link.active or sub_link.child_active %}true{% else %}false{% endif %}"> </span>
+
+              <ul class="{% if sub_link.active or sub_link.child_active %}active{% endif %}">
+                {% for sub_sub_link in sub_link.links %}
+                <li class="sub-menu">
+                  <a {% if sub_sub_link.active %}class="active"{% endif %} href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a>
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h4 class="toggle"><span>+</span>Menu title</h4>
+      <ul class="blog_list toggle_list">
+        <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+      </ul>
+      {% endif %}
+
+
+      {% elsif block.type == 'page' %}
+      {% if block.settings.content_page != blank %}
+      <h4 class="toggle"><span>+</span>{{ pages[block.settings.content_page].title }}</h4>
+      <ul class="blog_list toggle_list content_block">
+        <li>{{ pages[block.settings.content_page].content }}</li>
+      </ul>
+      {% else %}
+      <h4 class="toggle"><span>+</span>Page title</h4>
+      <ul class="blog_list toggle_list">
+        <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+      </ul>
+      {% endif %}
+
+      {% elsif block.type == 'search' %}
+      <div data-autocomplete-{{ settings.enable_autocomplete }}>
+        <form class="blog_search search__form" action="{{ routes.search_url }}">
+          <input type="hidden" name="type" value="article">
+          <span class="icon-search"></span>
+          <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.title' | t }} {{ blog.title | escape }}..." autocapitalize="off" autocomplete="off" autocorrect="off" value="{{ search.terms }}">
+        </form>
+      </div>
+
+      {% elsif block.type == 'newsletter' %}
+      {% if block.settings.newsletter_headline != blank %}
+      <h4>{{ block.settings.newsletter_headline }}</h4>
+      {% endif %}
+      {% if block.settings.newsletter_richtext != blank %}
+      {{ block.settings.newsletter_richtext }}
+      {% endif %}
+
+      {% render 'newsletter',
+                    context: 'sidebar',
+      first_name: block.settings.display_first_name,
+      last_name: block.settings.display_last_name
+      %}
+
+      {% elsif block.type == 'recent_posts' %}
+      {% assign tagcount = 0 %}
+      {% assign count = 0 %}
+      {% assign current_article = article.url %}
+      {% assign countItem = 0 %}
+      {% for tag in article.tags %}
+      {% capture count %}{{ count | plus: 1 }}{% endcapture %}
+              {% if tagcount < 1 %}
+                  {% if tag == 'News' or tag == 'Nutrition' or tag == 'Equipment' or tag == 'Science' or tag == 'Training' or tag == 'Reviews' %}
+                        
+                            {% paginate blogs.news.articles by 999 %}
+                            {% for article in blogs.news.articles %}
+                            {% if article.url != current_article %}
+                              {% if article.tags contains tag %}
+                            {% if countItem < 3 %}
+                            {% if countItem == 0 %}
+      <h4>{{ 'blogs.sidebar.recent_articles' | t }}</h4>
+      {% endif %}
+                          <ul class="blog_list">
+                            <li class="row">
+                              <div class="blog-list-img">
+                                <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                              <img  src="{{ article.image | img_url: '100x' }}"
+                                 alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+                                 data-src="{{ article.image | img_url: '800x' }}"
+                                 class="lazyload lazyload--fade-in"
+                                 style="max-width: {{- article.image.width -}}px"
+                                 data-sizes="auto"
+                                 data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                                              {{ article.image | img_url: '1600x' }} 1600w,
+                                              {{ article.image | img_url: '1200x' }} 1200w,
+                                              {{ article.image | img_url: '1000x' }} 1000w,
+                                              {{ article.image | img_url: '800x' }} 800w,
+                                              {{ article.image | img_url: '600x' }} 600w,
+                                              {{ article.image | img_url: '400x' }} 400w"
+                                 />
+                                </a>
+                            </div>
+                              <div class="blog-list-content">
+                                <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+                                {% if section.settings.blog_date %}
+                                <div class="meta">
+                                  <span class="label">{{ article.published_at | date: format: "month_day_year" }}</span>
+                                </div>
+                                {% endif %}
+
+                              </div>
+
+                            </li>
+                            {% endif %}
+                            {% assign countItem = countItem | plus: 1 %}
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                            {% endpaginate %}
+                          </ul>
+                  {% assign tagcount = tagcount | plus: 1 %}
+                  {% endif %}
+                {% endif %}
+          {%- endfor -%}
+      
+            {% if count == 0 or countItem == 0 %}
+                            <h4>{{ 'blogs.sidebar.recent_articles' | t }}</h4>
+                          <ul class="blog_list">
+                            {% for article in blogs[blog_handle].articles limit:3 %}
+                            {% if article.url != current_article %}
+                            <li class="row">
+                             <div class="blog-list-img">
+                                <a href="{{ article.url }}" title="{{ article.title | escape }}">
+                              <img  src="{{ article.image | img_url: '100x' }}"
+                                 alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+                                 data-src="{{ article.image | img_url: '800x' }}"
+                                 class="lazyload lazyload--fade-in"
+                                 style="max-width: {{- article.image.width -}}px"
+                                 data-sizes="auto"
+                                 data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                                              {{ article.image | img_url: '1600x' }} 1600w,
+                                              {{ article.image | img_url: '1200x' }} 1200w,
+                                              {{ article.image | img_url: '1000x' }} 1000w,
+                                              {{ article.image | img_url: '800x' }} 800w,
+                                              {{ article.image | img_url: '600x' }} 600w,
+                                              {{ article.image | img_url: '400x' }} 400w"
+                                 />
+                                </a>
+                            </div>
+                              <div class="blog-list-content">
+                                <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+                                {% if section.settings.blog_date %}
+                                <div class="meta">
+                                  <span class="label">{{ article.published_at | date: format: "month_day_year" }}</span>
+                                </div>
+                              {% endif %}
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            </ul>
+            {% endif %}
+		{% elsif block.type == 'must_read' %}
+      {% assign curr_arc = article.url %}
+      {% assign mustreadcount = 0 %}
+      {% for tag in blog.all_tags %}
+      {% if tag == 'MustRead' %}
+      <h4>Must Reads</h4>
+        <ul class="blog_list">
+          {% paginate blogs.news.articles by 999 %}
+          {% for article in blogs.news.articles %}
+          {% if article.url != curr_arc %}
+            {% if article.tags contains 'MustRead' %}
+          {% if mustreadcount < 3 %}
+          <li class="row">
+            <div class="blog-list-img">
+              <a href="{{ article.url }}" title="{{ article.title | escape }}">
+            <img  src="{{ article.image | img_url: '100x' }}"
+               alt="{% if article.image.alt != blank %}{{ article.image.alt }}{% else %}{{ article.title | escape }}{% endif %}"
+               data-src="{{ article.image | img_url: '800x' }}"
+               class="lazyload lazyload--fade-in"
+               style="max-width: {{- article.image.width -}}px"
+               data-sizes="auto"
+               data-srcset=" {{ article.image | img_url: '2048x' }} 2048w,
+                            {{ article.image | img_url: '1600x' }} 1600w,
+                            {{ article.image | img_url: '1200x' }} 1200w,
+                            {{ article.image | img_url: '1000x' }} 1000w,
+                            {{ article.image | img_url: '800x' }} 800w,
+                            {{ article.image | img_url: '600x' }} 600w,
+                            {{ article.image | img_url: '400x' }} 400w"
+               />
+              </a>
+          </div>
+            <div class="blog-list-content">
+              <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+              {% if section.settings.blog_date %}
+              <div class="meta">
+                <span class="label">{{ article.published_at | date: format: "month_day_year" }}</span>
+              </div>
+              {% endif %}
+            </div>
+          </li>
+          {% endif %}
+          {% assign mustreadcount = mustreadcount | plus: 1 %}
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          {% endpaginate %}
+        </ul>
+          {% endif %}
+          {% endfor %}
+      {% elsif block.type == 'post_tags'  %}
+      <h4 class="toggle"><span>+</span>{{ 'blogs.sidebar.categories' | t }}</h4>
+      <ul class="blog_list toggle_list">
+        {% if blogs[blog_handle].all_tags != blank %}
+        {% for tag in blogs[blog_handle].all_tags %}
+        <li>
+          <a href="{{ shop.url}}/blogs/{{ blogs[blog_handle].handle }}/tagged/{{ tag | handleize }}" title="{{ blogs[blog_handle].title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+        {% endif %}
+      </ul>
+      {% elsif block.type == 'blog_categories'  %}
+      <h4>Categories</h4>
+      <ul class="blog_list">
+        {% if blogs[blog_handle].all_tags != blank %}
+        {% for tag in blogs[blog_handle].all_tags %}
+        {% if tag == 'News' or tag == 'Nutrition' or tag == 'Equipment' or tag == 'Science' or tag == 'Training' or tag == 'Reviews' %}
+        <li>
+          <a href="{{ shop.url}}/blogs/{{ blogs[blog_handle].handle }}/tagged/{{ tag | handleize }}" title="{{ blogs[blog_handle].title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <li><p>{{ 'homepage.onboarding.no_content' | t }}</p></li>
+        {% endif %}
+      </ul>
+
+      {% elsif block.type == 'text' %}
+      <h4 class="toggle"><span>+</span>{{ block.settings.title | escape }}</h4>
+      <ul class="blog_list toggle_list content_block">
+        <li>{{ block.settings.text }}</li>
+      </ul>
+      
+    
+
+    {% elsif block.type == 'image-with-link' %}
+      <div class="sidebar-img">
+        <a href="{{ block.settings.sidebar_url }}">
+          <img src="{{ block.settings.sidebar_image.src | img_url: ""  }}">
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  
+  </div>
+</div>
+
+{% if context == 'product' %}
+{% style %}
+#shopify-section-{{ section.id }} {
+width: 25%;
+}
+
+#shopify-section-{{ section.id }} + .has-sidebar-option {
+width: 75%;
+}
+{% endstyle %}
+{% else %}
+{% style %}
+#shopify-section-{{ section.id }} .sidebar {
+width: 25%;
+}
+
+#shopify-section-{{ section.id }} .has-sidebar-option {
+width: 75%;
+}
+{% endstyle %}
+{% endif %}
+{% endif %}
+{% style %}
+.article .sidebar-block .blog_list .row{
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: left;
+    justify-content: space-between;
+}
+.article .sidebar-block .blog_list .blog-list-img{
+      width: 25%;
+}
+.article .sidebar-block .blog_list .blog-list-content{
+  width: 75%;
+    padding-left: 15px;
+}
+{% endstyle %}

@@ -1,0 +1,20 @@
+<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.shopify.com" crossorigin>
+<link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+
+<!-- Preload Images -->
+{% if template == 'article' %}<link rel="preload" as="image" href="{{ article.image | img_url: '2048x' }}">{% endif %}
+{% if template contains 'product' %}<link rel="preload" href="{{ product.media.first | img_url: '1200x' }}" as="image">{% endif %}
+
+<!-- Preload Assets -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" as="style">
+<link rel="preload" href="https://xx21lw6rdd5xn6uo-16337705.shopifypreview.com/cdn/shop/t/51/assets/bold-upsell-custom.css" as="style">
+<link rel="preload" href="{{ 'vendors.js' | asset_url }}" as="script">
+<link rel="preload" href="{{ 'mmenu-styles.scss' | asset_url }}" as="style">
+<link rel="preload" href="{{ 'fancybox.css' | asset_url }}" as="style">
+<link rel="preload" href="{{ 'styles.css' | asset_url }}" as="style">
+{% unless request.design_mode or request.path contains 'challenge' %}
+<link rel="preload" href="{{ 'preload.js' | asset_url }}" as="script">
+{{ 'preload.js' | asset_url | script_tag }}{% endunless %}
+<link rel="preload" href="{{ 'jquery.js' | asset_url }}" as="script">
+<link rel="preload" href="{{ 'app.js' | asset_url }}" as="script">
